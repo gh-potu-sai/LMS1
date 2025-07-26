@@ -1,0 +1,195 @@
+/* 🔁 CSS Reset */
+.login-page * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 🌌 Background Gradient */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(to right, #022252, #2355b2);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* 🧱 Login Form Wrapper */
+.login-page .login-wrapper {
+  width: 35%;
+  min-width: 450px;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* 🧾 Card Form Container */
+.login-page .login-form {
+  background: #fff;
+  padding: 2rem 2rem;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* 🔠 Title */
+.login-page .login-title {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, #022252, #2355b2);
+  
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 📋 Input Group */
+.login-page .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-page .form-group label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+/* ✍️ Input */
+.login-page input {
+  padding: 0.65rem 0.9rem;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f0f4ff;
+  transition: all 0.3s ease;
+}
+
+.login-page input:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2);
+  background-color: #fff;
+}
+
+/* 👁️ Password Visibility Toggle */
+.login-page .password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-page .password-field input {
+  width: 100%;
+}
+
+.login-page .toggle-password {
+  position: absolute;
+  right: 12px;
+  font-size: 1.1rem;
+  color: #666;
+  cursor: pointer;
+}
+
+/* 🔐 Button */
+.login-page .login-button {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background: linear-gradient(to right, #022252, #2355b2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.login-page .login-button:hover {
+  transform: scale(1.02);
+}
+
+/* ❗ Error */
+.login-page .error-message {
+  color: #d32f2f;
+  font-size: 0.88rem;
+  text-align: center;
+  margin-top: -0.5rem;
+}
+
+/* 🔁 Register Link */
+.login-page .switch-text {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+  color: #555;
+}
+
+.login-page .switch-text a {
+  color: #0d6efd;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-page .switch-text a:hover {
+  text-decoration: underline;
+}
+
+/* 📱 Tablet & Small Desktop (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .login-page .login-wrapper {
+    width: 60%;
+    min-width: auto;
+  }
+}
+
+/* 📱 Tablet (max-width: 768px) */
+@media (max-width: 768px) {
+  .login-page {
+    padding: 2rem 1rem;
+  }
+
+  .login-page .login-wrapper {
+    width: 85%;
+  }
+
+  .login-page .login-title {
+    font-size: 1.6rem;
+  }
+
+  .login-page .login-form {
+    padding: 1.5rem 1.2rem;
+  }
+}
+
+/* 📱 Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .login-page .login-wrapper {
+    width: 100%;
+    min-width: auto;
+    padding: 0 1rem;
+  }
+
+  .login-page .login-title {
+    font-size: 1.4rem;
+  }
+
+  .login-page .login-button {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .login-page input {
+    font-size: 0.85rem;
+    padding: 0.55rem 0.8rem;
+  }
+
+  .login-page .switch-text {
+    font-size: 0.85rem;
+  }
+}
