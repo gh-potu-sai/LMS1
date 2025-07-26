@@ -9,5 +9,8 @@ public class RegisterRequest {
     private String name;
     private String email;
     private String password;
-    private Role role;  // Must match Enum defined in User model
+    private Role role;
+
+    // 👇 Only required if role == ADMIN
+    private String adminKey;
 }

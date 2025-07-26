@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { login } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
-import '../../styles/auth/Login_and_Register.css';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../styles/auth/Login.css";
 
 function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -16,71 +19,99 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+
     try {
       const res = await login({
         username: form.username.trim(),
-        password: form.password
+        password: form.password,
       });
 
       localStorage.setItem("token", res.token);
       localStorage.setItem("role", res.role);
 
-      // Redirect based on role
-      if (res.role === "ADMIN") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/customer/dashboard");
-      }
+      toast.success("Login successful!");
+
+      setTimeout(() => {
+        if (res.role === "ADMIN") {
+          toast.info("Redirecting to Admin Dashboard...");
+          navigate("/admin/dashboard");
+        } else {
+          toast.info("Redirecting to Customer Dashboard...");
+          navigate("/customer/dashboard");
+        }
+      }, 1000);
     } catch (err) {
-      setError("Invalid username or password");
+      toast.error("Invalid username or password");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="auth-container">
-      <h2 className="auth-heading">Login</h2>
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <div className="input-group">
-          <label htmlFor="username">Username</label>
-          <input
-            className="auth-input"
-            id="username"
-            name="username"
-            value={form.username}
-            onChange={handleChange}
-            placeholder="Enter your username"
-            required
-          />
+    <>
+      <div className="login-page">
+        <div className="login-wrapper">
+          <form className="login-form" onSubmit={handleSubmit}>
+            <h2 className="login-title">Login</h2>
+
+            <div className="form-group">
+              <label htmlFor="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={form.username}
+                onChange={handleChange}
+                required
+                placeholder="Enter your username"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <div className="password-field">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter your password"
+                />
+                <span
+                  className="toggle-password"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  title={showPassword ? "Hide Password" : "Show Password"}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
+            </div>
+
+            <button type="submit" className="login-button" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
+            </button>
+
+            <p className="switch-text">
+              Don’t have an account? <a href="/register">Register</a>
+            </p>
+          </form>
         </div>
-
-        <div className="input-group">
-          <label htmlFor="password">Password</label>
-          <input
-            className="auth-input"
-            type="password"
-            id="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="Enter your password"
-            required
-          />
-        </div>
-
-        {error && <div className="error-text">{error}</div>}
-
-        <button className="auth-button" type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-
-      <div className="switch-link">
-        Don’t have an account? <a className="login-link" href="/register">Register</a>
       </div>
-    </div>
+
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </>
   );
 }
 
