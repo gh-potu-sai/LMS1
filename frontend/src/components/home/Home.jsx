@@ -79,7 +79,7 @@ function Home() {
       <div className="lms-nav-fixed-bg">
         <header className="lms-navbar">
           <div className="lms-logo">
-            <h2 style={{ margin: 0, color: "#ffffff" }}>SmartPurse</h2>
+            <h2 style={{ margin: 0, color: "#ffffff" }}>SmartLend</h2>
           </div>
           <nav id="navMenu">
             <ul>
@@ -101,7 +101,7 @@ function Home() {
           <div className="lms-hero-content">
             <h1>Empowering Your Dreams Through Smarter Lending</h1>
             <p>
-              At SmartPurse, we provide secure, simple, and quick loan services to help individuals and businesses
+              At SmartLend, we provide secure, simple, and quick loan services to help individuals and businesses
               achieve their financial goals. From personal loans to business expansion, we support your dreams with clarity and confidence.
             </p>
             <br />
@@ -112,7 +112,7 @@ function Home() {
 
       {/* LOAN TYPES */}
       <div className="lms-loan-list" id="loantypes">
-        <h2 className="loan-types-heading">Explore Our Loan Solutions</h2>
+        <h2 className="loan-types-heading">Loan Services We Offer</h2>
 
         <div className="lms-loan-scroll-wrapper">
           <div className="lms-loan-scroll">
@@ -171,14 +171,14 @@ function Home() {
       {/* ABOUT */}
       <div className="lms-about-container">
         <section id="about">
-          <h2>About SmartPurse</h2>
+          <h2>About SmartLend</h2>
           <p>
-            SmartPurse is your trusted partner in financial empowerment. We specialize in offering tailored loan solutions with transparency,
+            SmartLend is your trusted partner in financial empowerment. We specialize in offering tailored loan solutions with transparency,
             fast processing, and customer-first service. Whether it's personal, housing, or business needs — we’re here to back your journey.
           </p>
           <p>
             Our vision is to transform how people experience lending. Through digital-first solutions, robust data security, and responsible financing,
-            SmartPurse is committed to helping you achieve more.
+            SmartLend is committed to helping you achieve more.
           </p>
           <span className="lms-slogan">Dream Big. Borrow Smart. Achieve your dreams . . . ✍️</span>
         </section>
@@ -190,8 +190,8 @@ function Home() {
           <div className="lms-contact-wrapper">
             <h2>Contact Us</h2>
             <p>
-              <a href="mailto:smartpurse@support.com" className="email-link">
-                smartpurse@support.com
+              <a href="mailto:SmartLend@support.com" className="email-link">
+                SmartLend@support.com
               </a>
             </p>
             <form action="https://formsubmit.co/potupurnasai7@gmail.com" method="POST">
@@ -327,7 +327,7 @@ function Home() {
       {/* FOOTER */}
       <div className="lms-footer-container">
         <footer>
-          <p>&copy; 2025 SmartPurse. All rights reserved.</p>
+          <p>&copy; 2025 SmartLend. All rights reserved.</p>
         </footer>
       </div>
     </div>

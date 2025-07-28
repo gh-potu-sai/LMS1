@@ -78,7 +78,7 @@ function Register() {
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     if (!passwordRegex.test(form.password)) {
-      return toast.error("Password must include uppercase, lowercase, number, and special character.");
+      return toast.error("Password must be at least 8 characters and include uppercase, lowercase, number, and special character.");
     }
 
     if (form.password !== form.confirmPassword) {
