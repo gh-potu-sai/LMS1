@@ -1,67 +1,64 @@
+// Utility class for generating, parsing, and validating JWT tokens
+
 package com.loanmanagement.config;
 
+// --- JWT Library Imports ---
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+
+// --- Spring & Java Imports ---
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
-@Component
+
+@Component                                             // Marks this as a Spring-managed utility bean
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret}")                            // Secret key for signing JWT
     private String secret;
 
-    @Value("${jwt.expiration}")
+    @Value("${jwt.expiration}")                        // Expiration time (in milliseconds)
     private long expirationMs;
 
-    /**
-     * Generates a JWT token using username and role.
-     */
+    // Generate a JWT token with username and role
     public String generateToken(String username, String role) {
         return Jwts.builder()
-                .setSubject(username)
-                .claim("role", role)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
-                .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS256)
-                .compact();
+                .setSubject(username)                  // Set username as subject
+                .claim("role", role)                   // Add role as a custom claim
+                .setIssuedAt(new Date())               // Set token issue time
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMs)) // Set expiry
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS256) // Sign token
+                .compact();                            // Finalize token
     }
 
-    /**
-     * Extracts the username (subject) from the token.
-     */
+    // Extract the username (subject) from token
     public String extractUsername(String token) {
         return extractAllClaims(token).getSubject();
     }
 
-    /**
-     * Extracts the role from the token.
-     */
+    // Extract the user's role from token
     public String extractRole(String token) {
         return extractAllClaims(token).get("role", String.class);
     }
 
-    /**
-     * Validates if the token is well-formed and not expired.
-     */
+    // Validate if the token is well-formed and not expired
     public boolean isTokenValid(String token) {
         try {
-            extractAllClaims(token);
+            extractAllClaims(token);                   // Will throw if token is invalid/expired
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
-    /**
-     * Utility method to extract all claims.
-     */
+    // Extract all claims (payload) from token
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()
+        return Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes()))
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
+
 }
