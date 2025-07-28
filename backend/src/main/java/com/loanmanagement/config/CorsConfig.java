@@ -17,6 +17,7 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
 
             // Configure global CORS mappings
+            @SuppressWarnings("null")
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")                       // Apply to all endpoints
