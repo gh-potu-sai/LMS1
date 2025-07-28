@@ -1,10 +1,20 @@
 // src/services/authService.js
 
+// 📦 Axios for HTTP requests
 import axios from "axios";
 
+// 🌐 Backend base URL for authentication APIs
 const API = "http://localhost:8081/api/auth";
 
-// 🔐 Login function
+/**
+ * 🔐 login()
+ * --------------------------------------------
+ * Authenticates user with backend via username/password.
+ *
+ * 📤 Input:  { username, password }
+ * 🌐 POST:   /api/auth/login
+ * 📥 Output: { token, role }  ← used for auth/session
+ */
 export const login = async ({ username, password }) => {
   const response = await axios.post(
     `${API}/login`,
@@ -13,20 +23,30 @@ export const login = async ({ username, password }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      withCredentials: true,
+      withCredentials: true, // ✅ Enables credentials (cookies) if required
     }
   );
   return response.data;
 };
 
-// 📝 Register function
+/**
+ * 📝 register()
+ * --------------------------------------------
+ * Registers a new user (Customer/Admin) via backend.
+ *
+ * 📤 Input:  { name, email, username, password, role, adminKey? }
+ * 🌐 POST:   /api/auth/register
+ * 📌 adminKey added only if role === "ADMIN"
+ * 📥 Output: { message } or error
+ */
+
 export const register = async ({
   name,
   email,
   username,
   password,
   role,
-  adminKey, // ✅ Accept adminKey from frontend
+  adminKey,
 }) => {
   const payload = {
     name,
@@ -36,7 +56,7 @@ export const register = async ({
     role,
   };
 
-  // ✅ Only include adminKey if role is ADMIN
+  // 🔑 Only include adminKey if user is registering as ADMIN
   if (role === "ADMIN" && adminKey) {
     payload.adminKey = adminKey;
   }
