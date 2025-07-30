@@ -190,11 +190,11 @@ function Home() {
           <div className="lms-contact-wrapper">
             <h2>Contact Us</h2>
             <p>
-              <a href="mailto:SmartLend@support.com" className="email-link">
-                SmartLend@support.com
+              <a href="mailto:smartlendlms1@gmail.com" className="email-link">
+                SmartLendLms1@gmail.com
               </a>
             </p>
-            <form action="https://formsubmit.co/potupurnasai7@gmail.com" method="POST">
+            <form action="https://formsubmit.co/smartlendlms1@gmail.com" method="POST">
             <div className="form-row">
               <input
                 type="text"
