@@ -74,32 +74,52 @@
 .input-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem; /* more breathing room */
+  min-height: 90px; /* ensures space for strength & aligns rows */
 }
 
 .left-column .input-group {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 .right-column .input-group {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.1rem;
 }
 
 .input-group label {
   font-weight: 600;
   margin-bottom: 0.4rem;
   color: #444;
+  min-height: 24px; /* same height for all labels */
+  display: flex;
+  align-items: center;
 }
 
+
 /* ✏️ Inputs */
-.auth-input {
+
+
+
+.left-column .input-group input {
+  height: 47px; /* ⬆ Increase input height */
   padding: 0.75rem 1rem;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
-  background-color: #ffffff; /* changed from #f9f9f9 to pure white */
-  transition: all 0.3s ease-in-out;
+  background-color: #ffffff;
   color: #333;
+  box-sizing: border-box;
 }
+.right-column .input-group input {
+  height: 47px; /* ⬆ Increase input height */
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #333;
+  box-sizing: border-box;
+}
+
 
 
 .auth-input:focus {
@@ -107,6 +127,24 @@
   border-color: #0d6efd;
   box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
   background-color: #fff;
+}
+
+
+.register-page input:focus,
+.register-page select:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+  background-color: #fff;
+}
+.register-page input,
+.register-page select {
+  transition: all 0.3s ease-in-out;
+}
+
+.auth-input-role {
+  
+  margin-top: 0.3rem;
 }
 
 .auth-input::placeholder {
@@ -153,7 +191,9 @@ select.auth-input:focus {
 .password-wrapper input {
   width: 100%;
   padding-right: 2.7rem;
+  height: 48px; /* match other inputs */
 }
+
 
 .eye-icon {
   position: absolute;
@@ -171,10 +211,12 @@ select.auth-input:focus {
 
 /* 🔒 Strength Label */
 .password-strength {
+  height: 1.1em; /* fixed height */
+  margin-top: 5px;
+  font-weight: bold;
   font-size: 0.85rem;
-  font-weight: 600;
-  margin-top: 4px;
 }
+
 
 /* ❗ Error */
 .error-text {
@@ -371,7 +413,7 @@ select.auth-input:focus {
 
   .auth-input {
     font-size: 0.95rem;
-    
+
   }
 
   .modal-content {

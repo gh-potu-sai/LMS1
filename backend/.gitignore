@@ -31,3 +31,27 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# Java build output
+/target/
+*.class
+
+# Logs
+logs/
+*.log
+
+# Secret config files
+application-secret.properties
+*.key
+*.pem
+*.jks
+
+# Secrets
+backend/.env
+
+# Do NOT commit secrets
+backend/src/main/resources/application-secret.properties
+
+
+

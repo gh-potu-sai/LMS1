@@ -195,12 +195,34 @@ function Home() {
               </a>
             </p>
             <form action="https://formsubmit.co/potupurnasai7@gmail.com" method="POST">
-              <div className="form-row">
-                <input type="text" name="Name" placeholder="Name" required />
-                <input type="tel" name="Phone" placeholder="Phone Number" pattern="[0-9]{10}" required />
-              </div>
-              <input type="email" name="Email" placeholder="Email" required />
-              <label htmlFor="loanType">Choose the loan you're interested in:</label>
+            <div className="form-row">
+              <input
+                type="text"
+                name="Name"
+                placeholder="Full Name"
+                maxLength="30"
+                required
+              />
+              <input
+                type="tel"
+                name="Phone"
+                placeholder="Phone Number"
+                pattern="[0-9]{10}"
+                maxLength="10"
+                minLength="10"
+                required
+              />
+            </div>
+
+            <input
+              type="email"
+              name="Email"
+              placeholder="Email"
+              required
+            />
+
+            <div className="form-row loan-select-inline">
+              <label htmlFor="loanType">Loan you're interested in:</label>
               <select name="Interested Loan" required>
                 <option value="" disabled selected>Select a loan</option>
                 <option value="Home Loan">Home Loan</option>
@@ -210,19 +232,20 @@ function Home() {
                 <option value="Agricultural Loan">Agricultural Loan</option>
                 <option value="Educational Loan">Educational Loan</option>
               </select>
-              <label htmlFor="duration">Select Loan Duration:</label>
-              <select name="Loan Duration" required>
-                <option value="" disabled selected>Select duration</option>
-                <option value="< 6 months">less than 6 months</option>
-                <option value="6 months">6 months</option>
-                <option value="12 months">12 months (1 year)</option>
-                <option value="24 months">24 months (2 years)</option>
-                <option value="36 months">36 months (3 years)</option>
-                <option value="60 months">60 months (5 years)</option>
-                <option value=" > 60 months">more than 5 years</option>
-              </select>
-              <button type="submit">Send</button>
-            </form>
+            </div>
+
+
+            <textarea
+              name="Query"
+              placeholder="Enter your query or message here..."
+              maxLength="160"
+              required
+              className="query-textarea"
+            ></textarea>
+
+            <button type="submit">Send</button>
+          </form>
+
           </div>
         </section>
       </div>
