@@ -379,7 +379,8 @@ form {
 }
 
 form input,
-form select {
+form select,
+form textarea {
   padding: 0.6rem 0.8rem;
   font-size: 1rem;
   border: 1px solid #ccc;
@@ -388,11 +389,43 @@ form select {
   box-sizing: border-box;
 }
 
+/* 🟡 Loan Type Row Styling */
+.loan-select-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.loan-select-inline {
+  align-items: center;
+}
+
+.loan-select-inline label {
+  white-space: nowrap;
+  font-weight: 500;
+  color: #022252;
+  min-width: 180px; /* ✅ control label width */
+}
+
+.loan-select-inline select {
+  flex: 1;
+}
+
+
+/* 🟡 Query Textarea */
+form textarea.query-textarea {
+  height: 100px;
+  resize: vertical;
+  margin-top: -0.5rem; /* aligns it snug with spacing */
+}
+
+/* 🟡 Labels */
 form label {
   font-weight: 500;
   color: #022252;
 }
 
+/* 🟢 Button */
 form button {
   padding: 0.8rem;
   background-color: #023D6B;
@@ -408,6 +441,7 @@ form button {
 form button:hover {
   background-color: #031d45;
 }
+
 
 /* 🔐 Login CTA Section */
 .lms-login-cta {
