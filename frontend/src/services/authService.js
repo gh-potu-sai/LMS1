@@ -1,20 +1,9 @@
 // src/services/authService.js
 
-// 📦 Axios for HTTP requests
 import axios from "axios";
 
-// 🌐 Backend base URL for authentication APIs
 const API = "http://localhost:8081/api/auth";
 
-/**
- * 🔐 login()
- * --------------------------------------------
- * Authenticates user with backend via username/password.
- *
- * 📤 Input:  { username, password }
- * 🌐 POST:   /api/auth/login
- * 📥 Output: { token, role }  ← used for auth/session
- */
 export const login = async ({ username, password }) => {
   const response = await axios.post(
     `${API}/login`,
@@ -23,22 +12,11 @@ export const login = async ({ username, password }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      withCredentials: true, // ✅ Enables credentials (cookies) if required
+      withCredentials: true,
     }
   );
   return response.data;
 };
-
-/**
- * 📝 register()
- * --------------------------------------------
- * Registers a new user (Customer/Admin) via backend.
- *
- * 📤 Input:  { name, email, username, password, role, adminKey? }
- * 🌐 POST:   /api/auth/register
- * 📌 adminKey added only if role === "ADMIN"
- * 📥 Output: { message } or error
- */
 
 export const register = async ({
   name,
@@ -56,7 +34,6 @@ export const register = async ({
     role,
   };
 
-  // 🔑 Only include adminKey if user is registering as ADMIN
   if (role === "ADMIN" && adminKey) {
     payload.adminKey = adminKey;
   }
@@ -67,6 +44,34 @@ export const register = async ({
     },
     withCredentials: true,
   });
+
+  return response.data;
+};
+
+/**
+ * 🔁 forgotPassword()
+ * --------------------------------------------
+ * Sends forgot password request to backend.
+ *
+ * 📤 Input:  { username, newPassword, confirmPassword }
+ * 🌐 POST:   /api/auth/update-password
+ * 📥 Output: { message } or error
+ */
+export const forgotPassword = async ({ username, newPassword, confirmPassword }) => {
+  const response = await axios.post(
+    `${API}/update-password`,
+    {
+      username,
+      newPassword,
+      confirmPassword,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
 
   return response.data;
 };
