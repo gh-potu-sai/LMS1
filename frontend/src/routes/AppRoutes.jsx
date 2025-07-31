@@ -3,45 +3,47 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// 🧩 Importing all page components
 import Home from '../components/home/Home';
 import Login from '../components/auth/Login';
 import Register from '../components/auth/Register';
 import AdminDashboard from '../components/dashboard/AdminDashboard';
 import CustomerDashboard from '../components/dashboard/CustomerDashboard';
-import ProtectedRoute from './ProtectedRoute'; // 🔒 Wrapper to protect private routes
+import CustomerProfile from '../components/dashboard/CustomerProfile'; // ✅ Add this
+import ProtectedRoute from './ProtectedRoute';
 
-/**
- * AppRoutes component defines all frontend routes in the app.
- * Public routes (Home, Login, Register) are accessible by anyone.
- * Protected routes (Dashboards) require user authentication.
- */
 function AppRoutes() {
   return (
     <Router>
       <Routes>
         {/* ✅ Public Routes */}
-        <Route path="/" element={<Home />} />                 {/* Home page */}
-        <Route path="/login" element={<Login />} />           {/* Login page */}
-        <Route path="/register" element={<Register />} />     {/* Registration page */}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-        {/* 🔐 Protected Routes — accessible only after login */}
+        {/* 🔐 Admin Route */}
         <Route
           path="/admin/dashboard"
           element={
             <ProtectedRoute>
-              <AdminDashboard /> {/* Only for authenticated admin */}
+              <AdminDashboard />
             </ProtectedRoute>
           }
         />
+
+        {/* 🔐 Nested Protected Customer Routes */}
         <Route
           path="/customer/dashboard"
           element={
             <ProtectedRoute>
-              <CustomerDashboard /> {/* Only for authenticated customer */}
+              <CustomerDashboard />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="profile" element={<CustomerProfile />} />
+          {/* You can add these below as you build them: */}
+          {/* <Route path="emi" element={<EMICalculator />} /> */}
+          {/* <Route path="apply" element={<ApplyLoan />} /> */}
+        </Route>
       </Routes>
     </Router>
   );

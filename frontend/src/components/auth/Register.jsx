@@ -64,12 +64,8 @@ function Register() {
       return toast.error("Username must be alphanumeric and contain both letters and numbers.");
     }
 
-    if (!form.name.trim()) {
-      return toast.error("Full Name is required.");
-    }
-    if (/\d/.test(form.name)) {
-      return toast.error("Full Name should not contain numbers.");
-    }
+    if (!form.name.trim()) return toast.error("Full Name is required.");
+    if (/\d/.test(form.name)) return toast.error("Full Name should not contain numbers.");
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(form.email.trim())) {
@@ -100,8 +96,15 @@ function Register() {
 
     try {
       await register(trimmedForm);
-      toast.success("Registered successfully! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 2000);
+      toast.success("Registered successfully!", {
+        autoClose: 1200,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+      });
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1300);
     } catch (err) {
       const msg = err.response?.data?.message || "Username or Email already exists";
       const adminKeyIssue = (
@@ -118,6 +121,7 @@ function Register() {
       }
     }
   };
+
 
   const handleAdminSave = () => {
     if (tempAdminKey.trim() === "") {
@@ -241,14 +245,15 @@ function Register() {
 
       <ToastContainer
         position="top-center"
-        autoClose={3000}
+        autoClose={1500} // ✅ You can reduce to 2000 or 1500 for faster toast
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
-        pauseOnFocusLoss
+        pauseOnFocusLoss={false}
+        pauseOnHover={false}
         draggable
-        pauseOnHover
       />
+
     </div>
   );
 }
