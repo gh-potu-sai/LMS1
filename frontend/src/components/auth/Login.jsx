@@ -29,19 +29,23 @@ function Login() {
       localStorage.setItem("token", res.token);
       localStorage.setItem("role", res.role);
 
-      toast.success("Login successful!");
+      toast.success("Login successful!", {
+        autoClose: 1200,
+        pauseOnHover: false,
+        pauseOnFocusLoss: false,
+      });
 
       setTimeout(() => {
         if (res.role === "ADMIN") {
-          toast.info("Redirecting to Admin Dashboard...");
           navigate("/admin/dashboard");
         } else {
-          toast.info("Redirecting to Customer Dashboard...");
           navigate("/customer/dashboard");
         }
-      }, 1000);
+      }, 1300);
     } catch (err) {
-      toast.error("Invalid username or password");
+      toast.error("Invalid username or password", {
+        autoClose: 2000,
+      });
     } finally {
       setLoading(false);
     }
@@ -62,8 +66,10 @@ function Login() {
                 name="username"
                 value={form.username}
                 onChange={handleChange}
-                required
                 placeholder="Enter your username"
+                minLength={4}
+                maxLength={30}
+                required
               />
             </div>
 
@@ -76,8 +82,10 @@ function Login() {
                   name="password"
                   value={form.password}
                   onChange={handleChange}
-                  required
                   placeholder="Enter your password"
+                  minLength={8}
+                  maxLength={30}
+                  required
                 />
                 <span
                   className="toggle-password"
@@ -102,14 +110,14 @@ function Login() {
 
       <ToastContainer
         position="top-center"
-        autoClose={2000}
+        autoClose={1500}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
+        pauseOnFocusLoss={false}
+        pauseOnHover={false}
         draggable
-        pauseOnHover
+        limit={2}
       />
     </>
   );
