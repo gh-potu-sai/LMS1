@@ -14,6 +14,13 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+    
+    // ✅ Admin fetches own profile
+    @GetMapping("/me")
+    public UserProfileDto getOwnProfile(HttpServletRequest request) {
+        return adminService.getOwnProfile(request);
+    }
+
 
     @GetMapping("/user/{userId}")
     public UserProfileDto getUserById(@PathVariable Long userId) {

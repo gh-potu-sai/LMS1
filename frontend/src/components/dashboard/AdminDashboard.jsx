@@ -24,7 +24,7 @@ function AdminDashboard() {
     const token = localStorage.getItem("token");
     if (!token) navigate("/login");
 
-    fetch("http://localhost:8081/api/user/me", {
+    fetch("http://localhost:8081/api/admin/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
