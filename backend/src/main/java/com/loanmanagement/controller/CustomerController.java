@@ -14,11 +14,13 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    // ✅ Get current logged-in customer
     @GetMapping("/me")
     public UserProfileDto getCurrentUser(HttpServletRequest request) {
         return customerService.getCurrentUser(request);
     }
 
+    // ✅ Update customer's profile
     @PutMapping("/update")
     public UserProfileDto updateCustomer(@RequestBody CustomerUpdateDto updateDto, HttpServletRequest request) {
         return customerService.updateCustomer(updateDto, request);

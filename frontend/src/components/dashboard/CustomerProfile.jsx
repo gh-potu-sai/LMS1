@@ -17,11 +17,12 @@ function CustomerProfile() {
   const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:8081/api/user/me", {
+    fetch("http://localhost:8081/api/customer/me", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
+
       .then((res) => res.json())
       .then((data) => {
         setUser(data);

@@ -14,6 +14,12 @@ public class AdminService extends UserService {
         User user = userRepository.findById(userId).orElseThrow();
         return mapToDto(user);
     }
+    
+    public UserProfileDto getOwnProfile(HttpServletRequest request) {
+        User user = getUserFromRequest(request);  // from UserService
+        return mapToDto(user);                    // from UserService
+    }
+
 
     public UserProfileDto updateUserById(Long userId, AdminUpdateDto dto) {
         User user = userRepository.findById(userId).orElseThrow();

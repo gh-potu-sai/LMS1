@@ -15,7 +15,7 @@ function AdminProfile() {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:8081/api/user/me", {
+    fetch("http://localhost:8081/api/admin/me", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
