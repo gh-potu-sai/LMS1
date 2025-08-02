@@ -24,7 +24,7 @@
 }
 
 .profile-card + .profile-card {
-  margin-top: 0.2rem;
+  margin-top: 0.1rem;
 }
 
 .profile-card h2,
@@ -38,7 +38,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1rem;
-  padding: 1rem 0;
+
 }
 
 .profile-form .form-group {
@@ -229,22 +229,28 @@
   background-color: #666;
 }
 
-/* 📱 Responsive */
-@media (max-width: 768px) {
-  .profile-form.three-column-grid {
-    grid-template-columns: 1fr;
-  }
 
+@media (max-width: 790px) {
   .password-row {
-    flex-direction: column;
+
+    justify-content: center;
   }
 
+  .password-form-group {
+    width: 95%;
+  }
+
+  .password-field {
+    width: 100%;
+  }
+
+  .password-field input {
+    width: 100%;
+  }
+  
   .password-button-row {
-    flex-direction: row;
-    justify-content: flex-start;
-  }
+    margin-top: 1rem;
 
-  .password-button-row button {
-    width: 140px;
   }
+  
 }

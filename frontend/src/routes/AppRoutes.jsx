@@ -6,9 +6,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from '../components/home/Home';
 import Login from '../components/auth/Login';
 import Register from '../components/auth/Register';
+
 import AdminDashboard from '../components/dashboard/AdminDashboard';
 import CustomerDashboard from '../components/dashboard/CustomerDashboard';
-import CustomerProfile from '../components/dashboard/CustomerProfile'; // ✅ Add this
+import AdminProfile from '../components/dashboard/AdminProfile'; 
+import CustomerProfile from '../components/dashboard/CustomerProfile';
+
+import ApplyLoanForm from '../components/loan/customerLoan/ApplyLoanForm';
+
 import ProtectedRoute from './ProtectedRoute';
 
 function AppRoutes() {
@@ -20,30 +25,37 @@ function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* 🔐 Admin Route */}
+        {/* 🔐 Admin Dashboard & Profile */}
         <Route
           path="/admin/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute role="ADMIN">
               <AdminDashboard />
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/profile"
+          element={
+            <ProtectedRoute role="ADMIN">
+              <AdminProfile />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* 🔐 Nested Protected Customer Routes */}
+        {/* 🔐 Customer Dashboard with nested routes */}
         <Route
           path="/customer/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute role="CUSTOMER">
               <CustomerDashboard />
             </ProtectedRoute>
           }
         >
           <Route path="profile" element={<CustomerProfile />} />
-          {/* You can add these below as you build them: */}
-          {/* <Route path="emi" element={<EMICalculator />} /> */}
-          {/* <Route path="apply" element={<ApplyLoan />} /> */}
+          <Route path="apply-loan" element={<ApplyLoanForm />} />
         </Route>
+
       </Routes>
     </Router>
   );

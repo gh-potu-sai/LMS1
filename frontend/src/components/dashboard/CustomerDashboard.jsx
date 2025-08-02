@@ -12,12 +12,18 @@ import {
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../global/LogoutButton";
 import CustomerProfile from "./CustomerProfile";
+import ApplyLoanForm from "../loan/customerLoan/ApplyLoanForm";  // <-- Import here
+import CustomerLoanList from "../loan/customerLoan/CustomerLoanList";
+
 import "../../styles/dashboard/Dashboard.css";
 
 function CustomerDashboard() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("dashboard");
   const [user, setUser] = useState({ name: "" });
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+
+  const toggleSidebar = () => setSidebarVisible(prev => !prev);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -35,8 +41,19 @@ function CustomerDashboard() {
 
   return (
     <div className="dashboard-container">
+      {/* ☰ Toggle Button */}
+      <button className="dashboard-toggle-btn" onClick={toggleSidebar}>
+        ☰
+      </button>
+
+      {/* Overlay for sidebar */}
+      <div
+        className={`dashboard-overlay ${sidebarVisible ? "show" : ""}`}
+        onClick={toggleSidebar}
+      ></div>
+
       {/* Sidebar */}
-      <aside className="dashboard-sidebar">
+      <aside className={`dashboard-sidebar ${sidebarVisible ? "show" : ""}`}>
         <div className="dashboard-user-info">
           <FaUser size={42} className="dashboard-user-icon" />
           <p>Welcome,</p>
@@ -97,9 +114,11 @@ function CustomerDashboard() {
       {/* Main Section */}
       <main className="dashboard-main">
         {activeSection === "profile" && <CustomerProfile />}
+        {activeSection === "apply" && <ApplyLoanForm />}
+        {/* Keeping others commented for future */}
         {/* {activeSection === "dashboard" && <DashboardHome />} */}
-        {/* {activeSection === "applications" && <MyApplications />} */}
-        {/* {activeSection === "apply" && <ApplyLoanForm />} */}
+        {activeSection === "applications" && <CustomerLoanList />}
+
         {/* {activeSection === "status" && <StatusTracking />} */}
         {/* {activeSection === "payments" && <EMIPayments />} */}
         {/* {activeSection === "contact" && <ContactUsForm />} */}

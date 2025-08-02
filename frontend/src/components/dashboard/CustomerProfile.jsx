@@ -11,7 +11,6 @@ function CustomerProfile() {
 
   const [passwordEditMode, setPasswordEditMode] = useState(false);
   const [passwordForm, setPasswordForm] = useState({ password: "", confirmPassword: "" });
-  const [errors, setErrors] = useState({});
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -115,7 +114,8 @@ function CustomerProfile() {
   const saveProfile = () => {
     const validationErrors = validateProfile();
     if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+      Object.values(validationErrors).forEach(msg => toast.error(msg, { autoClose: 1500 }));
+     
       return;
     }
 
@@ -143,6 +143,7 @@ function CustomerProfile() {
         setTimeout(() => {
           setUser(data);
           setEditMode(false);
+          //
         }, 1000);
       })
       .catch(() => toast.error("Failed to update profile."));
@@ -171,6 +172,8 @@ function CustomerProfile() {
 
 
 
+ // ...existing imports...
+
   return (
     <div className="profile-board">
       <ToastContainer position="top-center" autoClose={1500} pauseOnHover={false} pauseOnFocusLoss={false} />
@@ -189,7 +192,6 @@ function CustomerProfile() {
               readOnly={!editMode}
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
-            {errors.name && <span className="error">{errors.name}</span>}
           </div>
 
           <div className="form-group">
@@ -210,9 +212,11 @@ function CustomerProfile() {
               value={form.contactNumber || ""}
               onChange={handleProfileChange}
               readOnly={!editMode}
+              maxLength={10}
+              pattern="\d{10}"
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
+              inputMode="numeric"
             />
-            {errors.contactNumber && <span className="error">{errors.contactNumber}</span>}
           </div>
 
           <div className="form-group">
@@ -222,9 +226,11 @@ function CustomerProfile() {
               value={form.alternatePhoneNumber || ""}
               onChange={handleProfileChange}
               readOnly={!editMode}
+              maxLength={10}
+              pattern="\d{10}"
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
+              inputMode="numeric"
             />
-            {errors.alternatePhoneNumber && <span className="error">{errors.alternatePhoneNumber}</span>}
           </div>
 
           <div className="form-group">
@@ -235,12 +241,10 @@ function CustomerProfile() {
               value={form.dateOfBirth || ""}
               onChange={handleProfileChange}
               readOnly={!editMode}
-              max={new Date().toISOString().split("T")[0]} // 🚫 restrict future dates
+              max={new Date().toISOString().split("T")[0]}
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
-            {errors.dateOfBirth && <span className="error">{errors.dateOfBirth}</span>}
           </div>
-
 
           {/* Column 3 */}
           <div className="form-group">
@@ -257,7 +261,6 @@ function CustomerProfile() {
               <option value="Female">Female</option>
               <option value="Prefer not to say">Prefer not to say</option>
             </select>
-            {errors.gender && <span className="error">{errors.gender}</span>}
           </div>
 
           <div className="form-group">
@@ -270,7 +273,6 @@ function CustomerProfile() {
               maxLength={30}
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
-            {errors.street && <span className="error">{errors.street}</span>}
           </div>
 
           <div className="form-group">
@@ -280,9 +282,9 @@ function CustomerProfile() {
               value={form.city || ""}
               onChange={handleProfileChange}
               readOnly={!editMode}
+              maxLength={30}
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
-            {errors.city && <span className="error">{errors.city}</span>}
           </div>
 
           <div className="form-group">
@@ -292,9 +294,9 @@ function CustomerProfile() {
               value={form.state || ""}
               onChange={handleProfileChange}
               readOnly={!editMode}
+               maxLength={30}
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
-            {errors.state && <span className="error">{errors.state}</span>}
           </div>
 
           <div className="form-group">
@@ -307,7 +309,6 @@ function CustomerProfile() {
               maxLength={6}
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
-            {errors.pincode && <span className="error">{errors.pincode}</span>}
           </div>
 
           <div className="form-group">
@@ -320,7 +321,6 @@ function CustomerProfile() {
               maxLength={30}
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
-            {errors.country && <span className="error">{errors.country}</span>}
           </div>
 
           <div className="form-group">
@@ -329,7 +329,6 @@ function CustomerProfile() {
           </div>
         </form>
 
-
         <div style={{ marginTop: "1rem" }}>
           {editMode ? (
             <>
@@ -337,13 +336,12 @@ function CustomerProfile() {
               <button
                 className="cancel"
                 onClick={() => {
-                  setForm({ ...user });  // 🔄 Reset unsaved form changes
-                  setEditMode(false);    // 🔐 Exit edit mode
+                  setForm({ ...user });
+                  setEditMode(false);
                 }}
               >
                 Cancel
               </button>
-
             </>
           ) : (
             <button className="edit-btn" onClick={() => setEditMode(true)}>Edit Profile</button>
@@ -385,7 +383,6 @@ function CustomerProfile() {
                     {showConfirm ? <FaEyeSlash /> : <FaEye />}
                   </span>
                 </div>
-
               </div>
 
               <div className="password-button-row">
@@ -393,19 +390,18 @@ function CustomerProfile() {
                 <button
                   className="cancel"
                   onClick={() => {
-                    setPasswordForm({ password: "", confirmPassword: "" }); // 🔄 Clear fields
-                    setErrors({});                                           // 🧽 Clear errors
-                    setPasswordEditMode(false);                              // 🔐 Exit edit mode
+                    setPasswordForm({ password: "", confirmPassword: "" });
+                    
+                    setPasswordEditMode(false);
                   }}
                 >
                   Cancel
                 </button>
-
               </div>
             </div>
           </>
         ) : (
-          <button className="edit-btn" onClick={() => setPasswordEditMode(true)}>Edit Password</button>
+         <button className="edit-btn" onClick={() => setPasswordEditMode(true)}>Edit Password</button>
         )}
       </div>
     </div>

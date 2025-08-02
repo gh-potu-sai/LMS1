@@ -12,7 +12,7 @@ function AdminProfile() {
   const [passwordEditMode, setPasswordEditMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [errors, setErrors] = useState({});
+
 
   useEffect(() => {
     fetch("http://localhost:8081/api/admin/me", {
@@ -54,7 +54,9 @@ function AdminProfile() {
   const saveProfile = () => {
     const validationErrors = validateProfile();
     if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+      Object.values(validationErrors).forEach(msg => toast.error(msg, { autoClose: 1500 }));
+
+      
       return;
     }
 
@@ -71,6 +73,7 @@ function AdminProfile() {
         toast.success("Profile updated successfully");
         setUser(data);
         setEditMode(false);
+        
       })
       .catch(() => toast.error("Failed to update profile"));
   };
@@ -125,21 +128,19 @@ function AdminProfile() {
 
 
 
-
   return (
     <div className="profile-board">
       <ToastContainer position="top-center" autoClose={1500} pauseOnHover={false} pauseOnFocusLoss={false} />
 
       {/* Admin Profile Section */}
       <div className="profile-card">
-        <h2>🛠️ Admin Profile</h2>
+        <h2>👤 Admin Profile</h2>
 
         <form className="profile-form three-column-grid">
           {/* Name */}
           <div className="form-group">
             <label>Name:</label>
-            <input name="name" value={form.name || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
-            {errors.name && <span className="error">{errors.name}</span>}
+            <input name="name" maxLength={30} value={form.name || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
           </div>
 
           <div className="form-group">
@@ -154,14 +155,30 @@ function AdminProfile() {
 
           <div className="form-group">
             <label>Contact Number:</label>
-            <input name="contactNumber" value={form.contactNumber || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
-            {errors.contactNumber && <span className="error">{errors.contactNumber}</span>}
+            <input
+              name="contactNumber"
+              value={form.contactNumber || ""}
+              onChange={handleProfileChange}
+              readOnly={!editMode}
+              maxLength={10}
+              pattern="\d{10}"
+              style={{ backgroundColor: editMode ? "white" : "#eee" }}
+              inputMode="numeric"
+            />
           </div>
 
           <div className="form-group">
             <label>Alternate Phone:</label>
-            <input name="alternatePhoneNumber" value={form.alternatePhoneNumber || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
-            {errors.alternatePhoneNumber && <span className="error">{errors.alternatePhoneNumber}</span>}
+            <input
+              name="alternatePhoneNumber"
+              value={form.alternatePhoneNumber || ""}
+              onChange={handleProfileChange}
+              readOnly={!editMode}
+              maxLength={10}
+              pattern="\d{10}"
+              style={{ backgroundColor: editMode ? "white" : "#eee" }}
+              inputMode="numeric"
+            />
           </div>
 
           <div className="form-group">
@@ -172,12 +189,10 @@ function AdminProfile() {
               value={form.dateOfBirth || ""}
               onChange={handleProfileChange}
               readOnly={!editMode}
-              max={new Date().toISOString().split("T")[0]} // 🚫 restrict future dates
+              max={new Date().toISOString().split("T")[0]}
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
-            {errors.dateOfBirth && <span className="error">{errors.dateOfBirth}</span>}
           </div>
-
 
           <div className="form-group">
             <label>Gender:</label>
@@ -187,37 +202,31 @@ function AdminProfile() {
               <option value="Female">Female</option>
               <option value="Prefer not to say">Prefer not to say</option>
             </select>
-            {errors.gender && <span className="error">{errors.gender}</span>}
           </div>
 
           <div className="form-group">
             <label>Street:</label>
-            <input name="street" value={form.street || ""} onChange={handleProfileChange} readOnly={!editMode} maxLength={30} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
-            {errors.street && <span className="error">{errors.street}</span>}
+            <input name="street"  value={form.street || ""} onChange={handleProfileChange} readOnly={!editMode} maxLength={30} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
           </div>
 
           <div className="form-group">
             <label>City:</label>
-            <input name="city" value={form.city || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
-            {errors.city && <span className="error">{errors.city}</span>}
+            <input name="city" maxLength={30} value={form.city || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
           </div>
 
           <div className="form-group">
             <label>State:</label>
-            <input name="state" value={form.state || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
-            {errors.state && <span className="error">{errors.state}</span>}
+            <input name="state" maxLength={30} value={form.state || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
           </div>
 
           <div className="form-group">
             <label>Pincode:</label>
             <input name="pincode" value={form.pincode || ""} onChange={handleProfileChange} readOnly={!editMode} maxLength={6} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
-            {errors.pincode && <span className="error">{errors.pincode}</span>}
           </div>
 
           <div className="form-group">
             <label>Country:</label>
-            <input name="country" value={form.country || ""} onChange={handleProfileChange} readOnly={!editMode} maxLength={30} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
-            {errors.country && <span className="error">{errors.country}</span>}
+            <input name="country" maxLength={30} value={form.country || ""} onChange={handleProfileChange} readOnly={!editMode}  style={{ backgroundColor: editMode ? "white" : "#eee" }} />
           </div>
 
           <div className="form-group">
@@ -233,13 +242,12 @@ function AdminProfile() {
               <button
                 className="cancel"
                 onClick={() => {
-                  setForm({ ...user });  // 🔄 Reset unsaved form changes
-                  setEditMode(false);    // 🔐 Exit edit mode
+                  setForm({ ...user });
+                  setEditMode(false);
                 }}
               >
                 Cancel
               </button>
-
             </>
           ) : (
             <button className="edit-btn" onClick={() => setEditMode(true)}>Edit Profile</button>
@@ -266,7 +274,6 @@ function AdminProfile() {
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </span>
                 </div>
-                
               </div>
 
               <div className="password-form-group">
@@ -282,7 +289,6 @@ function AdminProfile() {
                     {showConfirm ? <FaEyeSlash /> : <FaEye />}
                   </span>
                 </div>
-
               </div>
 
               <div className="password-button-row">
@@ -290,14 +296,13 @@ function AdminProfile() {
                 <button
                   className="cancel"
                   onClick={() => {
-                    setPasswordForm({ password: "", confirmPassword: "" }); // 🔄 Clear fields
-                    setErrors({});                                           // 🧽 Clear errors
-                    setPasswordEditMode(false);                              // 🔐 Exit edit mode
+                    setPasswordForm({ password: "", confirmPassword: "" });
+                   
+                    setPasswordEditMode(false);
                   }}
                 >
                   Cancel
                 </button>
-
               </div>
             </div>
           </>

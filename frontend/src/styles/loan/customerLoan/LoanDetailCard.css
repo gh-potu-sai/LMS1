@@ -1,0 +1,97 @@
+.loan-detail-card {
+  padding: 1.5rem;
+  background-color: #f7faff;
+  border-radius: 12px;
+  font-family: 'Segoe UI', sans-serif;
+  height: 95vh; /* 🔺 Increased form height */
+  overflow-y: auto; /* Enables scrolling if content exceeds 80vh */
+  position: relative;
+  
+}
+
+.loan-detail-card h3 {
+  text-align: center;
+  color: #023D6B;
+  margin-bottom: 1.2rem;
+}
+
+.loan-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem 1.5rem;
+  font-size: 1rem;
+  
+}
+
+/* 🔹 Field container */
+.loan-detail-grid div {
+  background: #ffffff;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+
+  border: 2px solid rgb(209, 208, 208);
+}
+
+/* 🔘 Button section */
+.loan-detail-btns {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.loan-detail-btns button {
+  padding: 15px 20px;
+  background-color: #023D6B;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.loan-detail-btns button:hover {
+  background-color: #034a90;
+}
+
+/* ❌ Close icon */
+.close-icon {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #444;
+  cursor: pointer;
+}
+
+.close-icon:hover {
+  color: #000;
+}
+
+/* 📱 Responsive layout for small screens */
+@media (max-width: 768px) {
+  .loan-detail-card {
+    padding: 1rem;
+  }
+
+  .loan-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .loan-detail-btns button {
+    width: 100%;
+  }
+  .loan-detail-card {
+    padding: 1.5rem;
+    background-color: #f7faff;
+    border-radius: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    height: 80vh; /* 🔺 Increased form height */
+    overflow-y: auto; /* Enables scrolling if content exceeds 80vh */
+    position: relative;
+    min-width: 100%;
+
+  }
+}

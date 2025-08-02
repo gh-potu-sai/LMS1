@@ -19,6 +19,9 @@ function AdminDashboard() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("dashboard");
   const [user, setUser] = useState({ name: "" });
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+
+  const toggleSidebar = () => setSidebarVisible(prev => !prev);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -36,8 +39,19 @@ function AdminDashboard() {
 
   return (
     <div className="dashboard-container">
+      {/* ☰ Hamburger Toggle for small screens */}
+      <button className="dashboard-toggle-btn" onClick={toggleSidebar}>
+        ☰
+      </button>
+
+      {/* Overlay when sidebar is open */}
+      <div
+        className={`dashboard-overlay ${sidebarVisible ? "show" : ""}`}
+        onClick={toggleSidebar}
+      ></div>
+
       {/* Sidebar */}
-      <aside className="dashboard-sidebar">
+      <aside className={`dashboard-sidebar ${sidebarVisible ? "show" : ""}`}>
         <div className="dashboard-user-info">
           <FaUser size={42} className="dashboard-user-icon" />
           <p>Welcome,</p>
