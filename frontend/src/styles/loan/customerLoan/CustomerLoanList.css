@@ -231,9 +231,9 @@
   border: 1px solid rgb(218, 218, 218);
 }
 
-.loan-status-badge.pending {
-  background-color: #fff3cd;
-  color: #856404;
+.loan-status-badge.submitted {
+  background-color: #e6f2ff;  /* Light blue */
+  color: #084298;             /* Blue text */
 }
 
 .loan-status-badge.approved {
@@ -245,6 +245,12 @@
   background-color: #f8d7da;
   color: #721c24;
 }
+
+.loan-status-badge.closed {
+  background-color: #e2e3e5;  /* Light gray */
+  color: #383d41;             /* Dark gray text */
+}
+
 
 .loan-action-buttons {
   display: flex;
@@ -274,7 +280,7 @@
   position: fixed;
   top: 0;
   left: 330px;
-  width: calc(100% - 330px);
+  width: calc(100% - 330px);                           /* ← Full width always */
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -283,8 +289,14 @@
   background: rgba(0, 123, 255, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(6px);
-  
+  padding: 1rem;
+  box-sizing: border-box;
 }
+
+.loan-modal-content{
+  min-width: 50%;
+}
+
 
 
 
@@ -314,6 +326,9 @@
   border: none;
 }
 
+.modal-open .toggle-filters-btn {
+  display: none !important;
+}
 
 
   
@@ -331,6 +346,9 @@
     opacity: 0;
     pointer-events: none;
   }
+  
+
+  
 
   .loan-filter-fixed.open {
     transform: translateX(0%);
@@ -507,7 +525,6 @@
     margin-left: -0.2rem;
     margin-top: -1rem;
   }
-  
 
   
   .loan-filter-fixed.open {
@@ -596,7 +613,16 @@
     padding-right: 0.5rem;
     padding-bottom: 10rem;
     
+    
   }
+  
+  .loan-modal-content{
+    height: 95vh;
+    min-width: 80%;
+    overflow-y: scroll;
+    padding-bottom: 5rem;
+  }
+  
   .loan-filter-fixed.open {
     border-radius: 30px 0 0 30px;
 

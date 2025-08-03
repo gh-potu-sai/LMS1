@@ -1,10 +1,10 @@
 /* 🧾 Loan Detail Card Container */
 .loan-detail-card {
-  padding: 2rem 3rem;
-  min-width: 80%;
-  margin: 0 auto;    /* Center it */
-  background-color: #f7faff;
-  border-radius: 12px;
+  padding: 3rem 3rem;
+  width: 90%;
+  margin: 3rem auto;    /* Center it */
+  background-color: #cccccc;
+  border-radius: 30px;
   font-family: 'Segoe UI', sans-serif;
   height: 95vh;
   overflow-y: auto;

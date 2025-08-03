@@ -7,12 +7,15 @@ import {
   FaCogs,
   FaChartLine,
   FaAddressCard,
-  FaEnvelope,
   FaSignOutAlt
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../global/LogoutButton";
 import AdminProfile from "./AdminProfile";
+import AdminLoanList from "../loan/adminloan/AdminLoanList";
+import LoanTypeConfig from "../loan/adminloan/LoanTypeConfig";
+import InterestPenaltyConfig from "../loan/adminloan/InterestPenaltyConfig";
+
 import "../../styles/dashboard/Dashboard.css";
 
 function AdminDashboard() {
@@ -25,26 +28,29 @@ function AdminDashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) navigate("/login");
+    if (!token) return navigate("/login");
 
     fetch("http://localhost:8081/api/admin/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("Unauthorized");
+        return res.json();
+      })
       .then((data) => setUser(data))
       .catch(() => navigate("/login"));
   }, [navigate]);
 
   return (
     <div className="dashboard-container">
-      {/* ☰ Hamburger Toggle for small screens */}
+      {/* ☰ Toggle Sidebar for small screens */}
       <button className="dashboard-toggle-btn" onClick={toggleSidebar}>
         ☰
       </button>
 
-      {/* Overlay when sidebar is open */}
+      {/* Overlay on Sidebar open */}
       <div
         className={`dashboard-overlay ${sidebarVisible ? "show" : ""}`}
         onClick={toggleSidebar}
@@ -102,12 +108,6 @@ function AdminDashboard() {
           >
             <FaAddressCard /> My Profile
           </button>
-          <button
-            className={activeSection === "contact" ? "active" : ""}
-            onClick={() => setActiveSection("contact")}
-          >
-            <FaEnvelope /> Contact Us
-          </button>
         </nav>
 
         <div className="dashboard-logout">
@@ -115,19 +115,15 @@ function AdminDashboard() {
         </div>
       </aside>
 
-      {/* Main Section */}
+      {/* Main Content */}
       <main className="dashboard-main">
         {activeSection === "profile" && <AdminProfile />}
-        {/* 
-          Future content:
-          {activeSection === "dashboard" && <AdminHome />}
-          {activeSection === "userManagement" && <UserManagement />}
-          {activeSection === "loanApplications" && <LoanApplications />}
-          {activeSection === "interestPenalty" && <InterestPenaltyConfig />}
-          {activeSection === "loanConfig" && <LoanTypeConfig />}
-          {activeSection === "reports" && <ReportsAnalytics />}
-          {activeSection === "contact" && <ContactAdmin />}
-        */}
+        {activeSection === "loanApplications" && <AdminLoanList />}
+        {activeSection === "loanConfig" && <LoanTypeConfig />}
+        {activeSection === "interestPenalty" && <InterestPenaltyConfig />}
+        {activeSection === "dashboard" && <h2>📊 Welcome to Admin Dashboard</h2>}
+        {activeSection === "userManagement" && <h2>🧑‍💼 User Management Coming Soon</h2>}
+        {activeSection === "reports" && <h2>📈 Reports & Analytics Coming Soon</h2>}
       </main>
     </div>
   );

@@ -22,12 +22,13 @@ public class LoanType {
     private String name;
 
     @DecimalMin(value = "0.0", inclusive = false, message = "Interest rate must be positive")
+    @DecimalMax(value = "100.0", message = "Interest rate cannot exceed 100 percent")
     @Digits(integer = 3, fraction = 2, message = "Interest rate format invalid")
     @Column(precision = 5, scale = 2)
     private BigDecimal interestRate;
 
     @NotBlank(message = "Requirements are required")
-    @Size(max = 500, message = "Requirements cannot exceed 500 characters")
+    @Size(max = 200, message = "Requirements cannot exceed 200 characters")
     private String requirements;
 
     @Min(value = 1, message = "Maximum tenure years must be at least 1")
@@ -35,8 +36,10 @@ public class LoanType {
     private int maxTenureYears;
 
     @DecimalMin(value = "0.0", inclusive = false, message = "Maximum loan amount must be positive")
+    @DecimalMax(value = "1000000000.00", message = "Maximum loan amount must not exceed ₹100 Cr")
     @Column(precision = 15, scale = 2)
     private BigDecimal maxLoanAmount;
+
 
     @DecimalMin(value = "0.0", message = "Penalty rate cannot be negative")
     @DecimalMax(value = "100.0", message = "Penalty rate cannot exceed 100 percent")

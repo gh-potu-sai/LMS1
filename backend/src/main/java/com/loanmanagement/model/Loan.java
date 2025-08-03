@@ -15,10 +15,12 @@ import java.time.LocalDateTime;
 public class Loan {
 
     public enum LoanStatus {
-        PENDING,
-        APPROVED,
-        REJECTED
+        SUBMITTED,   // When the customer submits a loan
+        APPROVED,    // When admin approves
+        REJECTED,    // When admin rejects
+        CLOSED       // When loan is closed or completed
     }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,12 +33,23 @@ public class Loan {
     @ManyToOne
     @JoinColumn(name = "loan_type_id")
     private LoanType loanType;
+    
+    
+    @NotNull(message = "Applied interest rate is required")
+    @Column(name = "applied_interest_rate")
+    private Double appliedInterestRate;
+    
+    
+    
+
 
     @NotNull(message = "Loan amount is required")
     @DecimalMin(value = "500.00", inclusive = true, message = "Loan amount must be at least ₹500")
+    @DecimalMax(value = "1000000000.00", message = "Loan amount must not exceed ₹100 Crores")
     @Digits(integer = 13, fraction = 2, message = "Invalid loan amount format")
     @Column(precision = 15, scale = 2)
     private java.math.BigDecimal amount;
+
 
     @NotBlank(message = "Loan purpose is required")
     @Size(min = 3, max = 300, message = "Purpose must be between 3 and 300 characters")
@@ -48,6 +61,8 @@ public class Loan {
         message = "Invalid income range"
     )
     private String income;
+    
+
 
     @NotBlank(message = "Employment info is required")
     @Pattern(

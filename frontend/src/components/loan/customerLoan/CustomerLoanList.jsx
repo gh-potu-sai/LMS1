@@ -16,7 +16,7 @@ import EducationalLoanImg from "../../../assets/Educational_Loan.png";
 import BusinessLoanImg from "../../../assets/Business_Loan.png";
 import AgriculturalLoanImg from "../../../assets/Agricultural_Loan.png";
 
-import { FiClock, FiCheckCircle, FiXCircle } from "react-icons/fi";
+import { FiSend, FiCheckCircle, FiXCircle, FiLock } from "react-icons/fi";
 
 
 function CustomerLoanList() {
@@ -60,13 +60,24 @@ function CustomerLoanList() {
 
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      result = result.filter(
-        (loan) =>
-          loan.loanType?.name?.toLowerCase().includes(term) ||
-          loan.referenceId?.toLowerCase().includes(term) ||
-          loan.id?.toString().toLowerCase().includes(term)
-      );
+
+      result = result.filter((loan) => {
+        const loanType = loan.loanType?.name?.toLowerCase() || "";
+        const referenceId = loan.referenceId?.toLowerCase() || "";
+        const id = loan.id?.toString() || "";
+        const customId = `ln00${loan.id}`.toLowerCase(); // based on actual loan.id
+
+        return (
+          loanType.includes(term) ||
+          referenceId.includes(term) ||
+          id.includes(term) ||
+          customId.includes(term)
+        );
+      });
     }
+    
+    
+
 
     if (statusFilter !== "All") {
       result = result.filter((loan) => loan.loanStatus === statusFilter);
@@ -103,6 +114,16 @@ function CustomerLoanList() {
     setFilteredLoans(result);
   }, [searchTerm, statusFilter, typeFilter, loans, startDate, endDate, sortOption]);
 
+  useEffect(() => {
+    if (selectedLoan) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+
+    // optional cleanup on unmount
+    return () => document.body.classList.remove("modal-open");
+  }, [selectedLoan]);
 
 
   const clearFilters = () => {
@@ -178,10 +199,12 @@ function CustomerLoanList() {
               className="loan-filter-input"
             >
               <option value="All">All Status</option>
-              <option value="PENDING">Pending</option>
+              <option value="SUBMITTED">Submitted</option>  {/* ✅ */}
               <option value="APPROVED">Approved</option>
               <option value="REJECTED">Rejected</option>
+              <option value="CLOSED">Closed</option>        {/* Optional */}
             </select>
+
           </div>
 
           <div className="loan-filter-group">
@@ -310,7 +333,9 @@ function CustomerLoanList() {
                   <img src={getLoanImage(loan.loanType?.name)} alt={loan.loanType?.name} />
                   <div>
                     <h4 className="loan-title">{loan.loanType?.name}</h4>
-                    <p className="loan-id">Application ID: {loan.referenceId || `LN00${index + 1}`}</p>
+
+                    <p className="loan-id">Application ID: {loan.referenceId || `LN00${loan.id}`}</p>
+
                     <p className="loan-applied-date">
                       Applied on: {new Date(loan.submittedAt).toLocaleDateString("en-IN")}
                     </p>
@@ -320,16 +345,17 @@ function CustomerLoanList() {
                 {/* Middle Section */}
                 <div className="loan-card-middle">
                   <h3 className="loan-amount">₹ {Number(loan.amount).toLocaleString("en-IN")}</h3>
-                  <p className="loan-label loan-purpose">Duration - {loan.tenureYears ?? "N/A"} {loan.tenureYears > 1 ? "years" : "year"}</p>
+                  <p className="loan-label loan-purpose">{loan.tenureYears ?? "N/A"} {loan.tenureYears > 1 ? "years" : "year"} - {loan.appliedInterestRate ?? 'N/A'}%</p>
                   <p className="loan-label loan-purpose">Purpose : {loan.purpose}</p>
                 </div>
 
                 {/* Right Section */}
                 <div className="loan-card-right">
                   <span className={`loan-status-badge ${loan.loanStatus?.toLowerCase()}`}>
-                    {loan.loanStatus === "PENDING" && <><FiClock style={{ marginRight: "5px" }} />UNDER REVIEW</>}
+                    {loan.loanStatus === "SUBMITTED" && <><FiSend style={{ marginRight: "5px" }} />SUBMITTED</>}
                     {loan.loanStatus === "APPROVED" && <><FiCheckCircle style={{ marginRight: "5px" }} />APPROVED</>}
                     {loan.loanStatus === "REJECTED" && <><FiXCircle style={{ marginRight: "5px" }} />REJECTED</>}
+                    {loan.loanStatus === "CLOSED" && <><FiLock style={{ marginRight: "5px" }} />CLOSED</>}
                   </span>
                   <div className="loan-action-buttons">
                     <button className="view-btn" onClick={() => setSelectedLoan(loan)}>View Details</button>

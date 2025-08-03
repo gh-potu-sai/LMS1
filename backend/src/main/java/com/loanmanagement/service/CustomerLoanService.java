@@ -53,6 +53,7 @@ public class CustomerLoanService {
 
         Loan loan = new Loan();
         loan.setLoanType(loanType);
+        loan.setAppliedInterestRate(loanType.getInterestRate().doubleValue());
         loan.setIncome(dto.getIncome());
         loan.setAmount(dto.getLoanAmount());
         loan.setTenureYears(dto.getLoanDuration());
@@ -63,7 +64,8 @@ public class CustomerLoanService {
         loan.setPreviousActiveLoans(dto.getPreviousActiveLoans());
         loan.setCibilScore(dto.getCibilScore());
 
-        loan.setLoanStatus(LoanStatus.PENDING);
+        loan.setLoanStatus(LoanStatus.SUBMITTED);
+
         loan.setCustomer(customer);
         loan.setSubmittedAt(java.time.LocalDateTime.now());
 

@@ -1,16 +1,17 @@
 import React from "react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import "../../../styles/loan/customerLoan/LoanDetailCard.css";
-import { FaTimes } from "react-icons/fa";
+import "../../../styles/loan/adminloan/LoanDetailCard.css";
 
 function LoanDetailCard({ loan, onClose }) {
   if (!loan) return null;
 
   // 🔁 EMI Calculation
-  const interestRate = loan.loanType?.interestRate || 0;
+  const interestRate = loan.appliedInterestRate || 0;
+
+
   const tenureMonths = loan.tenureYears * 12;
-  const principal = loan.amount;
+  const principal = loan.amount || 0;
   const monthlyRate = interestRate / 12 / 100;
 
   const emi = tenureMonths
@@ -55,14 +56,13 @@ function LoanDetailCard({ loan, onClose }) {
     return match ? parseInt(match.join("")) : 0;
   };
 
-  
+
   const sanitize = (val) => val ?? "N/A";
 
   // 📄 PDF Generation
   const downloadPDF = () => {
     const doc = new jsPDF("p", "mm", "a4");
 
-    // 🏦 Header
     doc.setFontSize(25);
     doc.setTextColor(3, 61, 107);
     doc.setFont("helvetica", "bold");
@@ -72,7 +72,6 @@ function LoanDetailCard({ loan, onClose }) {
     doc.setFont("helvetica", "normal");
     doc.text("Loan Application Summary", 105, 28, { align: "center" });
 
-    // 📍 Contact Info
     doc.setFontSize(9);
     doc.setTextColor(3, 61, 107);
     doc.text(
@@ -85,27 +84,31 @@ function LoanDetailCard({ loan, onClose }) {
     const startY = 50;
 
     const personal = [
-      ["Applicant Name", loan.customer?.name || "N/A"],
-      ["Email", loan.customer?.email || "N/A"],
-      ["Contact No", loan.customer?.contactNumber || "N/A"],
-      ["City", loan.customer?.city || "N/A"],
-      ["Pincode", loan.customer?.pincode || "N/A"],
+      ["Applicant Name", sanitize(loan.customer?.name)],
+      ["Email", sanitize(loan.customer?.email)],
+      ["Contact No", sanitize(loan.customer?.contactNumber)],
+      ["City", sanitize(loan.customer?.city)],
+      ["Pincode", sanitize(loan.customer?.pincode)],
       ["Employment Type", getEmploymentType(loan.employmentInfo)],
 
       ["Monthly Income", formatCurrency(parseIncomeToNumber(loan.income))],
-      ["PAN", loan.pan || "N/A"],
-      ["Aadhaar", loan.aadhaar || "N/A"],
+
+
+      ["PAN", sanitize(loan.pan)],
+      ["Aadhaar", sanitize(loan.aadhaar)],
     ];
 
     const loanInfo = [
       ["Loan ID", `LN${String(loan.id).padStart(3, "0")}`],
-      ["Loan Type", loan.loanType?.name || "N/A"],
-      ["Principal Amount", formatCurrency(principal)],
+
+      ["Loan Type", sanitize(loan.loanType)],
+
+      ["Principal Amount", `${formatCurrency(principal)}`],
       ["Tenure", `${loan.tenureYears} Years`],
       ["Interest Rate", `${interestRate}%`],
-      ["Purpose", loan.purpose || "N/A"],
-      ["Status", loan.loanStatus || "N/A"],
-      ["CIBIL Score", loan.cibilScore || "N/A"],
+      ["Purpose", sanitize(loan.purpose)],
+      ["Status", sanitize(loan.loanStatus)],
+      ["CIBIL Score", sanitize(loan.cibilScore)],
       [
         "Submitted On",
         loan.submittedAt
@@ -120,10 +123,9 @@ function LoanDetailCard({ loan, onClose }) {
     for (let i = 0; i < maxRows; i++) {
       const p = personal[i] || ["", ""];
       const l = loanInfo[i] || ["", ""];
-      combinedRows.push([p[0], p[1], l[0], l[1]]);
+      combinedRows.push([sanitize(p[0]), sanitize(p[1]), sanitize(l[0]), sanitize(l[1])]);
     }
 
-    // 🧾 Draw Table
     autoTable(doc, {
       startY: startY + 6,
       head: [["Personal Info", "", "Loan Info", ""]],
@@ -155,12 +157,11 @@ function LoanDetailCard({ loan, onClose }) {
       tableLineWidth: 0.2,
     });
 
-    // 📊 EMI Info
     const emiInfo = [
-      ["Monthly EMI", formatCurrency(emi)],
+      ["Monthly EMI", `${formatCurrency(emi)}`],
       ["Total EMIs", `${tenureMonths}`],
-      ["Total Interest", formatCurrency(totalInterest)],
-      ["Total Payable (P + I)", formatCurrency(totalPayable)],
+      ["Total Interest", `${formatCurrency(totalInterest)}`],
+      ["Total Payable (P + I)", `${formatCurrency(totalPayable)}`],
     ];
 
     autoTable(doc, {
@@ -180,7 +181,6 @@ function LoanDetailCard({ loan, onClose }) {
       },
     });
 
-    // 📌 Footer
     const h = doc.internal.pageSize.height;
     doc.setFontSize(8);
     doc.setTextColor(100);
@@ -199,65 +199,57 @@ function LoanDetailCard({ loan, onClose }) {
   };
 
   const getEmploymentType = (info) => {
-    if (!info) return "N/A";
-    const lower = info.toLowerCase();
-    if (lower.includes("self")) return "Self-Employed";
-    if (lower.includes("salaried") || lower.includes("employee"))
-      return "Salaried";
-    return info;
+    return info?.trim() || "N/A";
   };
+
 
   return (
     <div className="loan-detail-card">
-      <button className="close-icon" onClick={onClose}>
-        <FaTimes size={18} />
-      </button>
       <h3>Loan Application Details</h3>
 
       <h4 className="section-heading">Personal Info</h4>
       <div className="loan-detail-form">
         <div className="loan-field-line">
           <span className="loan-field-label">Name:</span>
-          <span className="loan-field-value">{loan.customer?.name}</span>
+          <span className="loan-field-value">{sanitize(loan.customer?.name)}</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">Email:</span>
-          <span className="loan-field-value">{loan.customer?.email}</span>
+          <span className="loan-field-value">{sanitize(loan.customer?.email)}</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">Contact:</span>
-          <span className="loan-field-value">{loan.customer?.contactNumber}</span>
+          <span className="loan-field-value">{sanitize(loan.customer?.contactNumber)}</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">City:</span>
-          <span className="loan-field-value">{loan.customer?.city}</span>
+          <span className="loan-field-value">{sanitize(loan.customer?.city)}</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">Pincode:</span>
-          <span className="loan-field-value">{loan.customer?.pincode}</span>
+          <span className="loan-field-value">{sanitize(loan.customer?.pincode)}</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">Employment:</span>
-          <span className="loan-field-value">
-            {getEmploymentType(loan.employmentInfo)}
-          </span>
+          <span className="loan-field-value">{getEmploymentType(loan.employmentInfo)}</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">Monthly Income:</span>
-          <span className="loan-field-value">{sanitize(loan.income)}</span>
           
+          <span className="loan-field-value">{sanitize(loan.income)}</span>
+
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">PAN:</span>
-          <span className="loan-field-value">{loan.pan}</span>
+          <span className="loan-field-value">{sanitize(loan.pan)}</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">Aadhaar:</span>
-          <span className="loan-field-value">{loan.aadhaar}</span>
+          <span className="loan-field-value">{sanitize(loan.aadhaar)}</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">CIBIL Score:</span>
-          <span className="loan-field-value">{loan.cibilScore}</span>
+          <span className="loan-field-value">{sanitize(loan.cibilScore)}</span>
         </div>
       </div>
 
@@ -265,13 +257,11 @@ function LoanDetailCard({ loan, onClose }) {
       <div className="loan-detail-form">
         <div className="loan-field-line">
           <span className="loan-field-label">Loan ID:</span>
-          <span className="loan-field-value">{`LN${String(
-            loan.id
-          ).padStart(3, "0")}`}</span>
+          <span className="loan-field-value">{`LN${String(loan.id).padStart(3, "0")}`}</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">Loan Type:</span>
-          <span className="loan-field-value">{loan.loanType?.name}</span>
+          <span className="loan-field-value">{sanitize(loan.loanType)}</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">Loan Amount:</span>
@@ -283,20 +273,22 @@ function LoanDetailCard({ loan, onClose }) {
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">Interest Rate:</span>
-          <span className="loan-field-value">{interestRate} %</span>
+          <span className="loan-field-value">{interestRate}%</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">Purpose:</span>
-          <span className="loan-field-value">{loan.purpose}</span>
+          <span className="loan-field-value">{sanitize(loan.purpose)}</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">Status:</span>
-          <span className="loan-field-value">{loan.loanStatus}</span>
+          <span className="loan-field-value">{sanitize(loan.loanStatus)}</span>
         </div>
         <div className="loan-field-line">
           <span className="loan-field-label">Submitted On:</span>
           <span className="loan-field-value">
-            {new Date(loan.submittedAt).toLocaleString("en-IN")}
+            {loan.submittedAt
+              ? new Date(loan.submittedAt).toLocaleString("en-IN")
+              : "N/A"}
           </span>
         </div>
       </div>
