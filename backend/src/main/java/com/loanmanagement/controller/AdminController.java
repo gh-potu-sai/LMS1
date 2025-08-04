@@ -3,7 +3,6 @@ package com.loanmanagement.controller;
 import com.loanmanagement.dto.AdminUpdateDto;
 import com.loanmanagement.dto.CustomerUpdateDto;
 import com.loanmanagement.dto.UserProfileDto;
-import com.loanmanagement.service.AdminLoanService;
 import com.loanmanagement.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
