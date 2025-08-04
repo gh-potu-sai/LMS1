@@ -142,6 +142,30 @@ function ApplyLoanForm() {
       })
       .catch(() => toast.error("Failed to load loan types"));
   }, []);
+  
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    fetch("http://localhost:8081/api/customer/loans/active-count", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch active loan count");
+        return res.json();
+      })
+      .then((data) => {
+        const count = Number(data.count) || 0;
+        setFormData((prev) => ({
+          ...prev,
+          previousActiveLoans: count,
+        }));
+      })
+      .catch(() => toast.error("Failed to fetch previous active loans"));
+  }, []);
+
 
 
   const handleChange = (e) => {
@@ -208,13 +232,15 @@ function ApplyLoanForm() {
       }
       return;
     }
-
-    if (name === "previousActiveLoans" || name === "cibilScore") {
+    
+    if (name === "cibilScore") {
       if (/^\d{0,3}$/.test(value)) {
         setFormData((prev) => ({ ...prev, [name]: value }));
       }
       return;
     }
+
+
 
     if (name === "employmentInfo") {
       if (value === "Student") {
@@ -508,11 +534,10 @@ function ApplyLoanForm() {
               id="previousActiveLoans"
               name="previousActiveLoans"
               value={formData.previousActiveLoans}
-              onChange={handleChange}
-              min="0"
-              max="100"
-              required
+              readOnly
+              disabled
             />
+
           </div>
         </div>
 
