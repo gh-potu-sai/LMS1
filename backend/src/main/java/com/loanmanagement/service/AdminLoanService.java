@@ -49,11 +49,10 @@ public class AdminLoanService {
                     .employmentInfo(loan.getEmploymentInfo())
                     .income(loan.getIncome())
                     .cibilScore(loan.getCibilScore())
-                    .customer(customerDto)  // ✅ use nested object
+                    .customer(customerDto) // ✅ use nested object
                     .build();
         }).collect(Collectors.toList());
     }
-
 
     public AdminLoanDetailDto getLoanById(Long id) {
         Loan loan = loanRepository.findById(id)
@@ -90,15 +89,23 @@ public class AdminLoanService {
                 .build();
     }
 
+    public void deleteLoan(Long id) {
+        Loan loan = loanRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Loan not found"));
+
+        historyRepository.deleteAllByLoan(loan);
+
+        loanRepository.delete(loan);
+    }
 
     public void updateLoanStatus(Long id, LoanStatusUpdateRequest request) {
         Loan loan = loanRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Loan not found"));
 
-        Loan.LoanStatus newStatus = Loan.LoanStatus.valueOf(request.getStatus());
+        Loan.LoanStatus newStatus = request.getStatus(); // ✅ clean
         loan.setLoanStatus(newStatus);
 
-        if (newStatus == Loan.LoanStatus.APPROVED || newStatus == Loan.LoanStatus.REJECTED) {
+        if (newStatus == Loan.LoanStatus.CLOSED) {
             loan.setClosedAt(LocalDateTime.now());
         }
 
@@ -114,10 +121,4 @@ public class AdminLoanService {
         historyRepository.save(history);
     }
 
-    public void deleteLoan(Long id) {
-        Loan loan = loanRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Loan not found"));
-
-        loanRepository.delete(loan);
-    }
 }

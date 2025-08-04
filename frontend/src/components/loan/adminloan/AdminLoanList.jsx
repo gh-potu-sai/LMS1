@@ -1,14 +1,18 @@
-import React, { useEffect, useState, useCallback } from "react";
-import "../../../styles/loan/adminloan/AdminLoanList.css";
 import axios from "axios";
+import { useCallback, useEffect, useState } from "react";
 import {
-  FaTrash,
-  FaThumbsUp,
-  FaThumbsDown,
-  FaTimes,
   FaEye,
-
+  FaThumbsDown,
+  FaThumbsUp,
+  FaTimes,
+  FaTrash,
 } from "react-icons/fa";
+import "../../../styles/loan/adminloan/AdminLoanList.css";
+
+
+
+import { FiCheckCircle, FiLock, FiSend, FiXCircle } from "react-icons/fi";
+
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoanDetailCard from "../adminloan/LoanDetailCard";
@@ -22,6 +26,15 @@ const AdminLoanList = () => {
   const [sortBy, setSortBy] = useState("");
   const [selectedLoan, setSelectedLoan] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [loanIdToDelete, setLoanIdToDelete] = useState(null);
+  
+  const [actionModal, setActionModal] = useState({ open: false, loan: null, status: "" });
+  const [actionComment, setActionComment] = useState("");
+
+  
+  
+
   const token = localStorage.getItem("token");
 
   const fetchLoans = useCallback(async () => {
@@ -92,21 +105,6 @@ const AdminLoanList = () => {
     setFilteredLoans(updated);
   }, [loans, searchTerm, statusFilter, typeFilter, sortBy]);
 
-  const updateLoanStatus = async (id, status) => {
-    try {
-      await axios.put(
-        `http://localhost:8081/api/admin/loans/${id}`,
-        { status },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      toast.success(`Loan ${status.toLowerCase()} successfully`);
-      fetchLoans();
-    } catch (err) {
-      toast.error("Failed to update status");
-    }
-  };
 
   const handleDelete = async (id) => {
     try {
@@ -261,15 +259,17 @@ const AdminLoanList = () => {
                   </td>
                   <td>
                     {loan.loanStatus ? (
-                      <span
-                        className={`status-badge ${loan.loanStatus.toLowerCase()}`}
-                      >
-                        {loan.loanStatus}
+                      <span className={`loan-status-badge ${loan.loanStatus.toLowerCase()}`}>
+                        {loan.loanStatus === "SUBMITTED" && <><FiSend style={{ marginRight: "6px" }} />SUBMITTED</>}
+                        {loan.loanStatus === "APPROVED" && <><FiCheckCircle style={{ marginRight: "6px" }} />APPROVED</>}
+                        {loan.loanStatus === "REJECTED" && <><FiXCircle style={{ marginRight: "6px" }} />REJECTED</>}
+                        {loan.loanStatus === "CLOSED" && <><FiLock style={{ marginRight: "6px" }} />CLOSED</>}
                       </span>
                     ) : (
                       "N/A"
                     )}
                   </td>
+
                   <td className="admin-actions">
                     <button
                       className="blue-btn"
@@ -279,28 +279,48 @@ const AdminLoanList = () => {
                     </button>
                     <button
                       className="green-btn"
-                      onClick={() => updateLoanStatus(loan.id, "APPROVED")}
+                      
+                      onClick={() => setActionModal({ open: true, loan, status: "APPROVED" })}
+
                     >
                       <FaThumbsUp /> Approve
                     </button>
                     <button
                       className="red-btn"
-                      onClick={() => updateLoanStatus(loan.id, "REJECTED")}
+                      onClick={() => setActionModal({ open: true, loan, status: "REJECTED" })}
+
                     >
                       <FaThumbsDown /> Reject
                     </button>
                     <button
                       className="gray-btn"
-                      onClick={() => updateLoanStatus(loan.id, "CLOSED")}
+                      onClick={() => setActionModal({ open: true, loan, status: "CLOSED" })}
                     >
                       <FaTimes /> Close
                     </button>
+                    
                     <button
                       className="delete-btn"
-                      onClick={() => handleDelete(loan.id)}
+                      onClick={() => {
+                        const status = loan.loanStatus;
+
+                        if (status === "REJECTED" || status === "CLOSED") {
+                          setLoanIdToDelete(loan.id);
+                          setShowDeleteModal(true);
+                        } else if (status === "APPROVED") {
+                          toast.error("Cannot delete an approved loan.");
+                        } else if (status === "SUBMITTED") {
+                          toast.info("Please reject the loan before deleting.");
+                        } else {
+                          toast.warn("Invalid status for deletion.");
+                        }
+                      }}
                     >
                       <FaTrash /> Delete
                     </button>
+
+
+
                   </td>
                 </tr>
               ))}
@@ -327,7 +347,107 @@ const AdminLoanList = () => {
         </div>
       )}
 
-      <ToastContainer position="top-center" autoClose={2000} />
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+      />
+
+      
+      {showDeleteModal && (
+        <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h4>
+              Are you sure you want to delete{" "}
+              <span style={{ color: "#d9534f" }}>Loan LN00{loanIdToDelete}</span>?
+            </h4>
+            <div className="modal-buttons">
+              <button
+                className="cancel-btn"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                No
+              </button>
+              <button
+                className="confirm-delete-btn"
+                onClick={() => {
+                  handleDelete(loanIdToDelete);
+                  setShowDeleteModal(false);
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {actionModal.open && (
+        <div className="modal-overlay" onClick={() => {
+          setActionModal({ open: false, loan: null, status: "" });
+          setActionComment("");
+        }}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h4 className="status-modal-heading">
+              {actionModal.status === "APPROVED" && "Approve"} 
+              {actionModal.status === "REJECTED" && "Reject"} 
+              {actionModal.status === "CLOSED" && "Close"}{" "}
+              Loan <span className="highlight-loan-id">LN00{actionModal.loan?.id}</span>
+            </h4>
+
+            <textarea
+              className="status-reason-textarea"
+              placeholder={`Enter reason (max 500 characters)...`}
+              value={actionComment}
+              onChange={(e) => setActionComment(e.target.value.slice(0, 500))}
+              rows={4}
+            />
+            <p className="char-count-label">
+              {actionComment.length}/500 characters
+            </p>
+
+            <div className="modal-buttons">
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setActionModal({ open: false, loan: null, status: "" });
+                  setActionComment("");
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="confirm-delete-btn"
+                disabled={actionComment.trim().length === 0}
+                onClick={async () => {
+                  try {
+                    await axios.put(
+                      `http://localhost:8081/api/admin/loans/${actionModal.loan.id}`,
+                      {
+                        status: actionModal.status,
+                        comments: actionComment.trim(),
+                      },
+                      {
+                        headers: { Authorization: `Bearer ${token}` },
+                      }
+                    );
+                    toast.success(`Loan ${actionModal.status.toLowerCase()} successfully`);
+                    fetchLoans();
+                  } catch (err) {
+                    toast.error("Failed to update loan status");
+                  } finally {
+                    setActionModal({ open: false, loan: null, status: "" });
+                    setActionComment("");
+                  }
+                }}
+              >
+                {actionModal.status}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
     </div>
   );
 };

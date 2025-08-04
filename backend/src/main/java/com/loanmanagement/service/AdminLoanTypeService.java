@@ -1,13 +1,15 @@
 package com.loanmanagement.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 import com.loanmanagement.dto.LoanTypeDto;
 import com.loanmanagement.model.LoanType;
 import com.loanmanagement.repository.LoanTypeRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

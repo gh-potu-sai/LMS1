@@ -20,6 +20,7 @@ public class ApplicationStatusHistory {
     @JoinColumn(name = "loan_id", nullable = false)
     private Loan loan;
 
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Loan.LoanStatus status;  // ✅ now matches Loan.java enum

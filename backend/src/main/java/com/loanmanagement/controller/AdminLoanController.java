@@ -3,6 +3,8 @@ package com.loanmanagement.controller;
 
 import com.loanmanagement.dto.*;
 import com.loanmanagement.service.AdminLoanService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,15 +31,21 @@ public class AdminLoanController {
         return ResponseEntity.ok(adminLoanService.getLoanById(id));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateLoanStatus(@PathVariable Long id,@RequestBody LoanStatusUpdateRequest request) {
-        adminLoanService.updateLoanStatus(id, request);
-        return ResponseEntity.ok("Loan status updated successfully");
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLoan(@PathVariable Long id) {
         adminLoanService.deleteLoan(id);
         return ResponseEntity.ok("Loan deleted successfully");
     }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateLoanStatus(
+            @PathVariable Long id,
+            @RequestBody @Valid LoanStatusUpdateRequest request
+    ) {
+        adminLoanService.updateLoanStatus(id, request);
+        return ResponseEntity.ok("Loan status updated successfully");
+    }
+
+
 }

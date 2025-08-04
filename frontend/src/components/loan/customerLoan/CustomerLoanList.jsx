@@ -17,7 +17,7 @@ import BusinessLoanImg from "../../../assets/Business_Loan.png";
 import AgriculturalLoanImg from "../../../assets/Agricultural_Loan.png";
 
 import { FiSend, FiCheckCircle, FiXCircle, FiLock } from "react-icons/fi";
-
+import { FaTimes } from "react-icons/fa";
 
 function CustomerLoanList() {
   const [loans, setLoans] = useState([]);
@@ -379,10 +379,15 @@ function CustomerLoanList() {
       {selectedLoan && (
         <div className="loan-modal-overlay" onClick={() => setSelectedLoan(null)}>
           <div className="loan-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-icon" onClick={() => setSelectedLoan(null)}>
+              <FaTimes size={18} />
+            </button>
+
             <LoanDetailCard loan={selectedLoan} onClose={() => setSelectedLoan(null)} />
           </div>
         </div>
       )}
+
       
       <ToastContainer position="top-center" autoClose={2000} />
 

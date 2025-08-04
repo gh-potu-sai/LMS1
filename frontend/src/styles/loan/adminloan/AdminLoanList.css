@@ -168,6 +168,38 @@
   color: #424242;
 }
 
+.loan-status-badge {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  text-transform: capitalize;
+}
+
+/* Color-coded based on status */
+.loan-status-badge.submitted {
+  background-color: #e3f2fd;
+  color: #0277bd;
+}
+
+.loan-status-badge.approved {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.loan-status-badge.rejected {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.loan-status-badge.closed {
+  background-color: #f3e5f5;
+  color: #6a1b9a;
+}
+
+
 /* 🎯 Action Buttons */
 .admin-actions {
   display: flex;
@@ -177,7 +209,7 @@
 
 .admin-actions button {
   font-size: 0.8rem;
-  padding: 6px 10px;
+  padding: 8px 10px;
   border: none;
   border-radius: 6px;
   font-weight: 500;
@@ -330,6 +362,110 @@
 .admin-toggle-filters-btn {
   display: none;
 }
+
+/* 🟦 Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 330px;
+  width: calc(100% - 330px);
+  z-index: 999;
+  /* width: 100vw; */
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 📦 Modal Box */
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 🔘 Buttons */
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+}
+
+.cancel-btn,
+.confirm-delete-btn {
+  flex: 1;
+  max-width: 120px; /* You can adjust this width as needed */
+  text-align: center;
+  padding: 0.6rem 1.4rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+}
+
+.confirm-delete-btn {
+  background-color: #d9534f;
+  color: white;
+}
+
+.status-modal-heading {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.highlight-loan-id {
+  color: #1976d2;
+}
+
+.status-reason-textarea {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  resize: none;
+  outline: none;
+  margin-top: 1rem;
+  box-sizing: border-box;
+}
+
+.char-count-label {
+  text-align: right;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.confirm-delete-btn:disabled {
+  background-color: #254562;
+  cursor: not-allowed;
+}
+
+.confirm-delete-btn{
+  background-color: #254562
+}
+.confirm-delete-btn:hover {
+  background-color: #254562
+}
+
 
 /* 📱 Show button and panel only on ≤900px */
 @media (max-width: 900px) {

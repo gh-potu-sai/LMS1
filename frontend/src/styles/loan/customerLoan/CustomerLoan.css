@@ -54,6 +54,8 @@
   transition: all 0.3s ease-in-out;
 }
 
+
+
 .apply-loan-form input:focus,
 .apply-loan-form select:focus,
 .apply-loan-form textarea:focus {
@@ -125,6 +127,7 @@
   background-color: #e0e0e0;
   border-color: #888;
 }
+
 
 /* Responsive: Tablets and below */
 @media (max-width: 1050px) {

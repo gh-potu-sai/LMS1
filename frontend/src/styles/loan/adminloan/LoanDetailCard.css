@@ -84,21 +84,6 @@
   background-color: #034a90;
 }
 
-/* ❌ Close Button (Top Right) */
-.close-icon {
-  position: absolute;
-  top: 30px;
-  right: 20px;
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  color: #444;
-  cursor: pointer;
-}
-
-.close-icon:hover {
-  color: #000;
-}
 
 /* 📱 Mobile Responsive Layout */
 @media (max-width: 768px) {

@@ -2,7 +2,7 @@ import React from "react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import "../../../styles/loan/customerLoan/LoanDetailCard.css";
-import { FaTimes } from "react-icons/fa";
+
 
 function LoanDetailCard({ loan, onClose }) {
   if (!loan) return null;
@@ -209,9 +209,7 @@ function LoanDetailCard({ loan, onClose }) {
 
   return (
     <div className="loan-detail-card">
-      <button className="close-icon" onClick={onClose}>
-        <FaTimes size={18} />
-      </button>
+      
       <h3>Loan Application Details</h3>
 
       <h4 className="section-heading">Personal Info</h4>

@@ -1,11 +1,19 @@
 package com.loanmanagement.dto;
 
-import lombok.*;
+import com.loanmanagement.model.Loan;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class LoanStatusUpdateRequest {
-    private String status;  // APPROVED / REJECTED
-    private String comments;  // Optional comment from admin
+    
+    @NotNull
+    private Loan.LoanStatus status;
+
+    @Size(max = 500)
+    private String comments;
 }
+
