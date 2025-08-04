@@ -13,6 +13,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Loan {
+    
+    @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<ApplicationStatusHistory> statusHistory;
+
 
     public enum LoanStatus {
         SUBMITTED,   // When the customer submits a loan
@@ -61,6 +65,7 @@ public class Loan {
         message = "Invalid income range"
     )
     private String income;
+    
     
 
 

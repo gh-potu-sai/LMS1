@@ -6,6 +6,7 @@ import com.loanmanagement.repository.*;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -89,15 +90,6 @@ public class AdminLoanService {
                 .build();
     }
 
-    public void deleteLoan(Long id) {
-        Loan loan = loanRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Loan not found"));
-
-        historyRepository.deleteAllByLoan(loan);
-
-        loanRepository.delete(loan);
-    }
-
     public void updateLoanStatus(Long id, LoanStatusUpdateRequest request) {
         Loan loan = loanRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Loan not found"));
@@ -120,5 +112,16 @@ public class AdminLoanService {
 
         historyRepository.save(history);
     }
+    
+    @Transactional
+    public void deleteLoan(Long id) {
+        Loan loan = loanRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Loan not found"));
+
+        loanRepository.delete(loan);
+    }
+
+    
+    
 
 }
