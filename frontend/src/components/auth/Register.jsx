@@ -149,15 +149,15 @@ function Register() {
             <div className="left-column">
               <div className="input-group">
                 <label>Username</label>
-                <input name="username" value={form.username} onChange={handleChange} maxLength="30" required />
+                <input name="username" value={form.username} onChange={handleChange} maxLength="30" placeholder="Enter your username" required />
               </div>
               <div className="input-group">
                 <label>Email</label>
-                <input type="email" name="email" value={form.email} onChange={handleChange} required />
+                <input type="email" name="email" value={form.email} placeholder="Enter your email" onChange={handleChange} required />
               </div>
               <div className="input-group">
                 <label>Full Name</label>
-                <input name="name" value={form.name} onChange={handleChange} maxLength="30" required />
+                <input name="name" value={form.name} placeholder="Enter your full name" onChange={handleChange} maxLength="30" required />
               </div>
             </div>
 
@@ -171,6 +171,7 @@ function Register() {
                     value={form.password}
                     onChange={handleChange}
                     maxLength="30"
+                    placeholder="Create a strong password"
                     required
                   />
                   <span className="eye-icon" onClick={() => setShowPassword((prev) => !prev)}>
@@ -199,6 +200,7 @@ function Register() {
                     value={form.confirmPassword}
                     onChange={handleChange}
                     maxLength="30"
+                    placeholder="Re-enter your password"
                     required
                   />
                   <span className="eye-icon" onClick={() => setShowConfirm((prev) => !prev)}>
@@ -226,7 +228,7 @@ function Register() {
       </div>
 
       {showAdminModal && (
-        <div className="modal-overlay">
+        <div className="modal-overlay-auth">
           <div className="modal-content">
             <h3>Enter Secret Admin Key</h3>
             <input

@@ -12,7 +12,10 @@ function LoanTypeConfig() {
     requirements: "",
     maxTenureYears: "",
     maxLoanAmount: "",
+    interestRate: "5.5",          // 💰 default
+    penaltyRatePercent: "1"       // ⚠️ default
   });
+
 
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingLoan, setEditingLoan] = useState(null);
@@ -92,6 +95,8 @@ function LoanTypeConfig() {
         requirements,
         maxTenureYears,
         maxLoanAmount,
+        interestRate: newLoan.interestRate,
+        penaltyRatePercent: newLoan.penaltyRatePercent,
       },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -103,6 +108,8 @@ function LoanTypeConfig() {
       requirements: "",
       maxTenureYears: "",
       maxLoanAmount: "",
+      interestRate: "5.5",
+      penaltyRatePercent: "1"
     });
 
     toast.success("New loan type added");

@@ -148,7 +148,7 @@ function Login() {
       </div>
 
       {showForgotModal && (
-        <div className="modal-overlay">
+        <div className="modal-overlay-auth">
           <div className="modal-content">
             <h3>Reset Password</h3>
             <form onSubmit={handleForgotSubmit} className="modal-form-1">

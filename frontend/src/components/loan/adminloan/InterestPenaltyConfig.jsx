@@ -13,12 +13,21 @@ const InterestPenaltyConfig = () => {
       const res = await axios.get("http://localhost:8081/api/admin/loan-types", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setLoanTypes(res.data);
+
+      //  With this block:
+      const initialized = res.data.map((type) => ({
+        ...type,
+        interestRate: type.interestRate ?? "5.5",
+        penaltyRatePercent: type.penaltyRatePercent ?? "1"
+      }));
+      setLoanTypes(initialized);
+
     } catch (error) {
       console.error("Failed to load loan types", error);
       toast.error("Failed to load loan types", { autoClose: 2000 });
     }
   }, [token]);
+
 
   useEffect(() => {
     fetchLoanTypes();
