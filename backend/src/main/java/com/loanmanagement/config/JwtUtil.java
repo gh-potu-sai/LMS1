@@ -1,58 +1,54 @@
-// Utility class for generating, parsing, and validating JWT tokens
-
 package com.loanmanagement.config;
 
-// --- JWT Library Imports ---
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-
-// --- Spring & Java Imports ---
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 
-
-@Component                                             // Marks this as a Spring-managed utility bean
+@Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")                            // Secret key for signing JWT
+    @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration}")                        // Expiration time (in milliseconds)
+    @Value("${jwt.expiration}")
     private long expirationMs;
 
-    // Generate a JWT token with username and role
+    // ✅ Generate JWT token with username and role
     public String generateToken(String username, String role) {
         return Jwts.builder()
-                .setSubject(username)                  // Set username as subject
-                .claim("role", role)                   // Add role as a custom claim
-                .setIssuedAt(new Date())               // Set token issue time
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMs)) // Set expiry
-                .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS256) // Sign token
-                .compact();                            // Finalize token
+                .setSubject(username)
+                .claim("role", role)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS256)
+                .compact();
     }
 
-    // Extract the username (subject) from token
+    // ✅ Extract username (subject) from token
     public String extractUsername(String token) {
         return extractAllClaims(token).getSubject();
     }
 
-    // Extract the user's role from token
+    // ✅ Extract user's role from token
     public String extractRole(String token) {
         return extractAllClaims(token).get("role", String.class);
     }
 
-    // Validate if the token is well-formed and not expired
+    // ✅ Validate token
     public boolean isTokenValid(String token) {
         try {
-            extractAllClaims(token);                   // Will throw if token is invalid/expired
+            extractAllClaims(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
-    // Extract all claims (payload) from token
+    // ✅ Internal: Get all claims
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes()))
@@ -61,4 +57,12 @@ public class JwtUtil {
                 .getBody();
     }
 
+    // ✅ NEW: Extract token from Authorization header
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7); // remove "Bearer "
+        }
+        return null;
+    }
 }

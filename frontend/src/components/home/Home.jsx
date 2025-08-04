@@ -3,7 +3,7 @@ import "../../styles/home/Home.css";
 import HomeLoanImg from "../../assets/Home_Loan.png";
 import PersonalLoanImg from "../../assets/Personal_Loan.png";
 import BusinessLoanImg from "../../assets/Business_Loan.png";
-import VehicleLoanImg from "../../assets/Vechile_Loan.png";
+import VehicleLoanImg from "../../assets/Vehicle_Loan.png";
 import AgriculturalLoanImg from "../../assets/Agricultural_Loan.png";
 import EducationalLoanImg from "../../assets/Educational_Loan.png";
 import EmiCalculatorIcon from "../../assets/Emi_Calculator.png";

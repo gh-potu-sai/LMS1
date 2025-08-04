@@ -1,39 +1,33 @@
 package com.loanmanagement.model;
 
-// Enables ORM annotations like @Entity, @Id, @ManyToOne, etc.
 import jakarta.persistence.*;
-
-// Lombok for generating boilerplate code
 import lombok.*;
-
 import java.time.LocalDateTime;
 
-@Entity                                    // Marks this class as a JPA entity for DB mapping
-@Table(name = "application_status_history") // Maps this entity to the "application_status_history" table
-@Data                                     // Generates getters, setters, toString, equals, and hashCode
-@NoArgsConstructor                        // Generates a no-argument constructor
-@AllArgsConstructor                       // Generates a constructor with all fields
-@Builder                                  // Enables object creation using builder pattern
+@Entity
+@Table(name = "application_status_history")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ApplicationStatusHistory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne                             // Many status updates are linked to one loan
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "loan_id", nullable = false)
     private Loan loan;
 
-    @Enumerated(EnumType.STRING)          // Store LoanStatus as string in DB
-    private LoanStatus status;            // Status of the loan at this history point
 
-    private String comments;              // Optional comments for the status update
-    private LocalDateTime updatedAt;      // Timestamp of when the status was updated
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Loan.LoanStatus status;  // ✅ now matches Loan.java enum
 
-    // Enum for loan application status tracking
-    public enum LoanStatus {
-        SUBMITTED,   // Application has been submitted
-        APPROVED,    // Application has been approved
-        REJECTED,    // Application has been rejected
-        CLOSED       // Loan has been closed
-    }
+    @Column(length = 500)
+    private String comments;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 }

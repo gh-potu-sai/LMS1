@@ -151,7 +151,16 @@ npm start
 </table>
 
 ### 🔐 5. Login Page
-![Login](https://github.com/user-attachments/assets/4fd58cb8-2ba7-4f46-9878-54af08de27c2)
+
+- The login interface allows Admin and Customer users to authenticate. On successful login, a JWT token is issued and used for all secured API access.
+- Users can securely reset their password by providing their username and new credentials. Backend validations are in place to prevent mismatches or unauthorized resets.
+
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/c5303ef7-6635-4b97-9ed0-5371d115517c" width="100%"/></td>
+    <td><img src="https://github.com/user-attachments/assets/17ef2d0b-beaa-4f80-9198-25fa3129f6e1" width="100%"/></td>
+  </tr>
+</table>
 
 ### 🔐 6. Emi Calculator Feature
 
@@ -166,6 +175,38 @@ It dynamically shows:
 - 📈 Total payable amount and principal breakdown
 
 ![Emi_Calculator](https://github.com/user-attachments/assets/762aa001-d409-4b99-b594-12ec64e826d0)
+
+### 🔐 7. Admin Dashboard
+
+The Admin dashboard offers full control over the system, allowing administrative users to manage all aspects of the loan platform.
+
+- The Admin dashboard offers full control over the system, allowing administrative users to manage all aspects of the loan platform.
+- Dashboard – Overview with loan statistics and system metrics (coming soon)
+- User Management – Manage all registered users
+- Loan Applications – Approve, reject, or delete customer loan applications
+- Interest & Penalty Config – Define interest rates and penalty settings
+- Loan Type Configuration – Manage available loan types
+- Reports & Analytics – Visual reports on loan activity (coming soon)
+- My Profile – View and update admin details, change password
+- Contact Us – Raise support or service-related queries (coming soon)
+
+<img width="100%" alt="AdminDashboard" src="https://github.com/user-attachments/assets/7a04eeeb-7aec-46eb-b11e-f44d905120d8" />
+
+
+### 👤 8. Customer Dashboard
+
+The Customer dashboard is streamlined for individual users to apply for loans, track their progress, and manage payments.
+
+- Dashboard – Overview with loan statistics and system metrics (coming soon)
+- User Management – Manage all registered users
+- Loan Applications – Approve, reject, or delete customer loan applications
+- Interest & Penalty Config – Define interest rates and penalty settings
+- Loan Type Configuration – Manage available loan types
+- Reports & Analytics – Visual reports on loan activity (coming soon)
+- My Profile – View and update admin details, change password
+- Contact Us – Raise support or service-related queries (coming soon)
+
+<img width="100%" alt="CustomerDashboard" src="https://github.com/user-attachments/assets/0eda8297-7c05-40d4-888b-0b31e81d7d9b" />
 
 This allows users to plan finances better before applying for any loan, enhancing the platform's usability and transparency.
 

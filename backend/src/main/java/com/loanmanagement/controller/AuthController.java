@@ -4,7 +4,9 @@ import com.loanmanagement.config.JwtUtil;
 import com.loanmanagement.dto.AuthResponse;
 import com.loanmanagement.dto.LoginRequest;
 import com.loanmanagement.dto.RegisterRequest;
-import com.loanmanagement.dto.UpdatePasswordRequest; // ✅ NEW DTO for password update
+
+import com.loanmanagement.dto.UpdatePasswordRequest;
+
 import com.loanmanagement.model.User;
 import com.loanmanagement.service.AuthService;
 
