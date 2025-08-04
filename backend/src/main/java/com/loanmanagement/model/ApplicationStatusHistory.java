@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "application_status_history")
 @Data
@@ -16,9 +18,11 @@ public class ApplicationStatusHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "loan_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "loan_id")
+    @JsonIgnoreProperties("statusHistory")
     private Loan loan;
+
 
 
     @Enumerated(EnumType.STRING)

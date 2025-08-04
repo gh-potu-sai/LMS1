@@ -284,7 +284,7 @@ select.auth-input:focus {
 }
 
 /* 🔐 Admin Key Modal */
-.modal-overlay {
+.modal-overlay-auth {
   position: fixed;
   top: 0;
   left: 0;
