@@ -70,5 +70,12 @@ public class CustomerLoanController {
         int count = loanRepository.countByCustomerAndLoanStatus(customer, LoanStatus.APPROVED);
         return ResponseEntity.ok(Collections.singletonMap("count", count));
     }
+    
+    @GetMapping("/active-loan-counts")
+    public ResponseEntity<Map<Long, Integer>> getActiveLoanCounts(HttpServletRequest request) {
+        User customer = getAuthenticatedCustomer(request);
+        return ResponseEntity.ok(loanService.getActiveLoanCounts(customer));
+    }
+
 
 }

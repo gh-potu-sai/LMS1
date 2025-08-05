@@ -6,6 +6,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "loans")
 @Data
@@ -36,7 +38,9 @@ public class Loan {
 
     @ManyToOne
     @JoinColumn(name = "loan_type_id")
+    @JsonIgnoreProperties("loans")
     private LoanType loanType;
+
     
     
     @NotNull(message = "Applied interest rate is required")
@@ -85,8 +89,6 @@ public class Loan {
     @Pattern(regexp = "[A-Z]{5}[0-9]{4}[A-Z]", message = "Invalid PAN format")
     private String pan;
 
-    @Min(value = 0, message = "Previous loans cannot be negative")
-    private int previousActiveLoans;
 
     @Min(value = 300, message = "CIBIL score must be at least 300")
     @Max(value = 900, message = "CIBIL score cannot exceed 900")

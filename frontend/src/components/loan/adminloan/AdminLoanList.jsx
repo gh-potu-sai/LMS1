@@ -277,27 +277,60 @@ const AdminLoanList = () => {
                     >
                       <FaEye /> View
                     </button>
+                    
                     <button
                       className="green-btn"
-                      
-                      onClick={() => setActionModal({ open: true, loan, status: "APPROVED" })}
-
+                      onClick={() => {
+                        if (loan.loanStatus === "APPROVED") {
+                          toast.info("Loan already approved");
+                        } else if (loan.loanStatus === "CLOSED") {
+                          toast.info("Loan is already closed and cannot be approved");
+                        } else {
+                          setActionModal({ open: true, loan, status: "APPROVED" });
+                        }
+                      }}
                     >
                       <FaThumbsUp /> Approve
                     </button>
+
+
+                    
                     <button
                       className="red-btn"
-                      onClick={() => setActionModal({ open: true, loan, status: "REJECTED" })}
-
+                      onClick={() => {
+                        if (loan.loanStatus === "REJECTED") {
+                          toast.info("Loan already rejected");
+                        } else if (loan.loanStatus === "APPROVED") {
+                          toast.error("Approved loans cannot be rejected");
+                        } else if (loan.loanStatus === "CLOSED") {
+                          toast.error("Closed loans cannot be rejected");
+                        } else {
+                          setActionModal({ open: true, loan, status: "REJECTED" });
+                        }
+                      }}
                     >
                       <FaThumbsDown /> Reject
                     </button>
+
+                    
+                    
                     <button
                       className="gray-btn"
-                      onClick={() => setActionModal({ open: true, loan, status: "CLOSED" })}
+                      onClick={() => {
+                        if (loan.loanStatus === "CLOSED") {
+                          toast.info("Loan already closed");
+                        } else if (loan.loanStatus === "REJECTED") {
+                          toast.error("Rejected loans cannot be closed");
+                        } else if (loan.loanStatus !== "APPROVED") {
+                          toast.warn("Only approved loans can be closed");
+                        } else {
+                          setActionModal({ open: true, loan, status: "CLOSED" });
+                        }
+                      }}
                     >
                       <FaTimes /> Close
                     </button>
+
                     
                     <button
                       className="delete-btn"
@@ -327,6 +360,13 @@ const AdminLoanList = () => {
             </tbody>
           </table>
         </div>
+        
+        {filteredLoans.length === 0 && (
+          <div className="no-applications-message">
+            No loan applications found.
+          </div>
+        )}
+  
       </div>
 
       {/* 👁️ View Modal */}

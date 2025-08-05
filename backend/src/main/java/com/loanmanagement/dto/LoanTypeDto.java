@@ -11,8 +11,10 @@ public class LoanTypeDto {
     private Long loanTypeId;
     private String name;
     private BigDecimal interestRate;
-    private String requirements;
     private int maxTenureYears;
     private BigDecimal maxLoanAmount;
     private BigDecimal penaltyRatePercent;
+
+    // ✅ New field added
+    private int maxLoansPerCustomerPerLoanType;
 }

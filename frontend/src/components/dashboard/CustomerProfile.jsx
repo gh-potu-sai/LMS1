@@ -189,6 +189,7 @@ function CustomerProfile() {
               name="name"
               value={form.name || ""}
               onChange={handleProfileChange}
+              placeholder="Enter full name"
               readOnly={!editMode}
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
@@ -213,6 +214,7 @@ function CustomerProfile() {
               onChange={handleProfileChange}
               readOnly={!editMode}
               maxLength={10}
+              placeholder="Enter contact number"
               pattern="\d{10}"
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
               inputMode="numeric"
@@ -227,6 +229,7 @@ function CustomerProfile() {
               onChange={handleProfileChange}
               readOnly={!editMode}
               maxLength={10}
+              placeholder="Enter alternate number"
               pattern="\d{10}"
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
               inputMode="numeric"
@@ -241,6 +244,7 @@ function CustomerProfile() {
               value={form.dateOfBirth || ""}
               onChange={handleProfileChange}
               readOnly={!editMode}
+              placeholder="Select date of birth"
               max={new Date().toISOString().split("T")[0]}
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
@@ -271,6 +275,7 @@ function CustomerProfile() {
               onChange={handleProfileChange}
               readOnly={!editMode}
               maxLength={30}
+              placeholder="Enter street name"
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
           </div>
@@ -283,6 +288,7 @@ function CustomerProfile() {
               onChange={handleProfileChange}
               readOnly={!editMode}
               maxLength={30}
+              placeholder="Enter city"
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
           </div>
@@ -294,7 +300,8 @@ function CustomerProfile() {
               value={form.state || ""}
               onChange={handleProfileChange}
               readOnly={!editMode}
-               maxLength={30}
+              maxLength={30}
+              placeholder="Enter state"
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
           </div>
@@ -307,6 +314,7 @@ function CustomerProfile() {
               onChange={handleProfileChange}
               readOnly={!editMode}
               maxLength={6}
+              placeholder="Enter 6-digit pincode"
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
           </div>
@@ -319,6 +327,7 @@ function CustomerProfile() {
               onChange={handleProfileChange}
               readOnly={!editMode}
               maxLength={30}
+              placeholder="Enter country"
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
           </div>

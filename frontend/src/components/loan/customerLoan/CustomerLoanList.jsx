@@ -321,7 +321,10 @@ function CustomerLoanList() {
           {loading ? (
             <p>Loading...</p>
           ) : filteredLoans.length === 0 ? (
-            <p>No loan applications found.</p>
+            <div className="no-applications-message">
+              No loan applications found.
+            </div>
+
           ) : (
             filteredLoans.map((loan, index) => (
               

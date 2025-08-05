@@ -140,7 +140,7 @@ function AdminProfile() {
           {/* Name */}
           <div className="form-group">
             <label>Name:</label>
-            <input name="name" maxLength={30} value={form.name || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
+            <input name="name" maxLength={30} placeholder="Enter full name" value={form.name || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
           </div>
 
           <div className="form-group">
@@ -161,6 +161,7 @@ function AdminProfile() {
               onChange={handleProfileChange}
               readOnly={!editMode}
               maxLength={10}
+              placeholder="Enter contact number"
               pattern="\d{10}"
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
               inputMode="numeric"
@@ -176,6 +177,7 @@ function AdminProfile() {
               readOnly={!editMode}
               maxLength={10}
               pattern="\d{10}"
+              placeholder="Enter alternate number"
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
               inputMode="numeric"
             />
@@ -189,6 +191,7 @@ function AdminProfile() {
               value={form.dateOfBirth || ""}
               onChange={handleProfileChange}
               readOnly={!editMode}
+              placeholder="Select date of birth"
               max={new Date().toISOString().split("T")[0]}
               style={{ backgroundColor: editMode ? "white" : "#eee" }}
             />
@@ -206,27 +209,27 @@ function AdminProfile() {
 
           <div className="form-group">
             <label>Street:</label>
-            <input name="street"  value={form.street || ""} onChange={handleProfileChange} readOnly={!editMode} maxLength={30} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
+            <input name="street" placeholder="Enter street name" value={form.street || ""} onChange={handleProfileChange} readOnly={!editMode} maxLength={30} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
           </div>
 
           <div className="form-group">
             <label>City:</label>
-            <input name="city" maxLength={30} value={form.city || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
+            <input name="city" placeholder="Enter city" maxLength={30} value={form.city || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
           </div>
 
           <div className="form-group">
             <label>State:</label>
-            <input name="state" maxLength={30} value={form.state || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
+            <input name="state" placeholder="Enter state" maxLength={30} value={form.state || ""} onChange={handleProfileChange} readOnly={!editMode} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
           </div>
 
           <div className="form-group">
             <label>Pincode:</label>
-            <input name="pincode" value={form.pincode || ""} onChange={handleProfileChange} readOnly={!editMode} maxLength={6} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
+            <input name="pincode" placeholder="Enter 6-digit pincode" value={form.pincode || ""} onChange={handleProfileChange} readOnly={!editMode} maxLength={6} style={{ backgroundColor: editMode ? "white" : "#eee" }} />
           </div>
 
           <div className="form-group">
             <label>Country:</label>
-            <input name="country" maxLength={30} value={form.country || ""} onChange={handleProfileChange} readOnly={!editMode}  style={{ backgroundColor: editMode ? "white" : "#eee" }} />
+            <input name="country" placeholder="Enter country" maxLength={30} value={form.country || ""} onChange={handleProfileChange} readOnly={!editMode}  style={{ backgroundColor: editMode ? "white" : "#eee" }} />
           </div>
 
           <div className="form-group">

@@ -52,6 +52,17 @@
   background-color: #f6fcff;
 }
 
+
+.no-loan-types {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+  color: #666;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #fafafa;
+}
+
+
 /* 🧠 Table Head */
 .interest-config-table thead th {
   position: sticky;
@@ -157,6 +168,106 @@
   text-align: center;
 }
 
+.interest-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 330px; /* Keeps sidebar visible */
+  width: calc(100% - 330px);
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.35); /* translucent black */
+  backdrop-filter: blur(3px);            /* blur effect */
+  z-index: 999;                          /* high priority */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.interest-modal {
+  background-color: white;
+  padding: 2rem;
+  width: 400px;
+  max-width: 90%;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  position: relative;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.interest-modal h4 {
+  margin-bottom: 1.2rem;
+  color: #023D6B;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.interest-modal label {
+  font-weight: 500;
+  color: #333;
+  display: block;
+  margin-top: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+
+.interest-modal input {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.interest-modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.interest-modal-buttons button {
+  flex: 1;
+  margin: 0 0.5rem;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.interest-modal-buttons .cancel {
+  background-color: #83888b;
+  color: white;
+}
+
+.interest-modal-buttons .cancel:hover {
+  background-color: #28292a;
+}
+
+.interest-modal-buttons .save {
+  background-color: #023D6B;
+  color: white;
+}
+
+.interest-modal-buttons .save:hover {
+  background-color: #021c3c;
+}
+
+.interest-modal-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #888;
+  cursor: pointer;
+}
+
+.interest-modal-close:hover {
+  color: #000;
+}
 /* 📱 Responsive: Scroll + Adjustments @ 1050px */
 @media (max-width: 1050px) {
   .interest-config-table-wrapper {

@@ -311,6 +311,38 @@
 }
 
 
+/* 🟰 Equal width for all 5 table columns */
+.loan-type-table th,
+.loan-type-table td {
+  width: 20%;
+  text-align: center;
+}
+
+.loan-type-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 330px; /* Keeps sidebar visible */
+  width: calc(100% - 330px);
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.35); /* translucent black */
+  backdrop-filter: blur(3px);            /* blur effect */
+  z-index: 999;                          /* high priority */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-loan-types {
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 1.1rem;
+  color: #777;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f9f9f9;
+
+}
+
+
 @media (max-width: 768px) {
   .loan-type-modal-overlay {
     left: 0;

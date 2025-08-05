@@ -1,13 +1,14 @@
 package com.loanmanagement.dto;
 
 import lombok.Data;
+import java.math.BigDecimal;
 
 @Data
 public class LoanRequestDto {
 
     private Long loanTypeId;
 
-    private java.math.BigDecimal loanAmount;
+    private BigDecimal loanAmount;
 
     private int loanDuration;
 
@@ -20,8 +21,6 @@ public class LoanRequestDto {
     private String aadhaar;
 
     private String pan;
-
-    private int previousActiveLoans;
 
     private int cibilScore;
 }

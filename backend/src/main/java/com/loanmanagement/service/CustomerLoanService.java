@@ -61,16 +61,16 @@ public class CustomerLoanService {
         loan.setEmploymentInfo(dto.getEmploymentInfo());
         loan.setAadhaar(dto.getAadhaar());
         loan.setPan(dto.getPan());
-        loan.setPreviousActiveLoans(dto.getPreviousActiveLoans());
+        // 🔥 Removed: loan.setPreviousActiveLoans(...)
         loan.setCibilScore(dto.getCibilScore());
 
         loan.setLoanStatus(LoanStatus.SUBMITTED);
-
         loan.setCustomer(customer);
         loan.setSubmittedAt(java.time.LocalDateTime.now());
 
         return loanRepository.save(loan);
     }
+
 
     public List<Loan> getLoansByCustomer(User customer) {
         return loanRepository.findByCustomer(customer);
@@ -84,4 +84,18 @@ public class CustomerLoanService {
         }
         return loan;
     }
+    
+    public java.util.Map<Long, Integer> getActiveLoanCounts(User customer) {
+        List<Loan> activeLoans = loanRepository.findByCustomerAndLoanStatusIn(
+                customer,
+                List.of(LoanStatus.SUBMITTED, LoanStatus.APPROVED)
+        );
+
+        return activeLoans.stream()
+                .collect(java.util.stream.Collectors.groupingBy(
+                        loan -> loan.getLoanType().getLoanTypeId(),
+                        java.util.stream.Collectors.reducing(0, e -> 1, Integer::sum)
+                ));
+    }
+
 }

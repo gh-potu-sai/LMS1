@@ -14,4 +14,7 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     // ✅ Count only approved loans for a customer
     int countByCustomerAndLoanStatus(User customer, LoanStatus status);
+
+    // ✅ NEW: Count active loans grouped by type (for apply rule enforcement)
+    List<Loan> findByCustomerAndLoanStatusIn(User customer, List<LoanStatus> statuses);
 }

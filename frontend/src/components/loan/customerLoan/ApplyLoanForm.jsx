@@ -109,6 +109,8 @@ function ApplyLoanForm() {
 
   const [formData, setFormData] = useState(initialFormData);
   const [loanTypes, setLoanTypes] = useState([]);
+  
+  const [activeLoanCounts, setActiveLoanCounts] = useState({});
 
   // Fetch loan types on mount
   useEffect(() => {
@@ -147,23 +149,20 @@ function ApplyLoanForm() {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch("http://localhost:8081/api/customer/loans/active-count", {
+    fetch("http://localhost:8081/api/customer/loans/active-loan-counts", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch active loan count");
+        if (!res.ok) throw new Error("Failed to fetch active loan counts");
         return res.json();
       })
       .then((data) => {
-        const count = Number(data.count) || 0;
-        setFormData((prev) => ({
-          ...prev,
-          previousActiveLoans: count,
-        }));
+        setActiveLoanCounts(data); // ✅ THIS LINE is what eliminates the warning
       })
-      .catch(() => toast.error("Failed to fetch previous active loans"));
+      .catch(() => toast.error("Failed to fetch active loan counts"));
+
   }, []);
 
 
@@ -172,14 +171,29 @@ function ApplyLoanForm() {
     const { name, value } = e.target;
 
     if (name === "loanTypeId") {
+      const selectedId = Number(value);
+      const count = activeLoanCounts[selectedId] || 0;
+
+      if (count >= 3) {
+        toast.error("You have exceeded the limit of active loans for this loan type.");
+        // Reset selection to blank
+        setFormData((prev) => ({
+          ...prev,
+          loanTypeId: "",
+        }));
+        return;
+      }
+
+      // Proceed normally if within allowed limit
       setFormData((prev) => ({
         ...prev,
-        [name]: Number(value),
+        [name]: selectedId,
         loanAmount: "",
         tenureYears: "",
       }));
       return;
     }
+
 
     if (name === "loanAmount") {
       const numericValue = parseCurrency(value);
@@ -280,7 +294,8 @@ function ApplyLoanForm() {
       formData.employmentInfo,
       formData.income,
       formData.loanPurpose,
-      Number(formData.previousActiveLoans)
+      activeLoanCounts[formData.loanTypeId] || 0
+
     );
     setFormData((prev) => ({ ...prev, cibilScore: score.toString() }));
     toast.success("CIBIL Score generated successfully!");
@@ -528,17 +543,17 @@ function ApplyLoanForm() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="previousActiveLoans">Previous Active Loans</label>
+            <label>Active Loans </label>
             <input
               type="number"
-              id="previousActiveLoans"
-              name="previousActiveLoans"
-              value={formData.previousActiveLoans}
               readOnly
               disabled
+              value={activeLoanCounts[formData.loanTypeId] || 0}
             />
-
           </div>
+
+          
+          
         </div>
 
         <div className="right-column">

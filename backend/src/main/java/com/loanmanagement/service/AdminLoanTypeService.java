@@ -31,11 +31,15 @@ public class AdminLoanTypeService {
         LoanType type = LoanType.builder()
                 .name(dto.getName())
                 .interestRate(dto.getInterestRate())
-                .requirements(dto.getRequirements())
                 .maxTenureYears(dto.getMaxTenureYears())
                 .maxLoanAmount(dto.getMaxLoanAmount())
                 .penaltyRatePercent(dto.getPenaltyRatePercent())
+                .maxLoansPerCustomerPerLoanType(
+                    dto.getMaxLoansPerCustomerPerLoanType() > 0
+                        ? dto.getMaxLoansPerCustomerPerLoanType()
+                        : 3)
                 .build();
+
         loanTypeRepository.save(type);
         dto.setLoanTypeId(type.getLoanTypeId());
         return dto;
@@ -47,10 +51,13 @@ public class AdminLoanTypeService {
 
         existing.setName(dto.getName());
         existing.setInterestRate(dto.getInterestRate());
-        existing.setRequirements(dto.getRequirements());
         existing.setMaxTenureYears(dto.getMaxTenureYears());
         existing.setMaxLoanAmount(dto.getMaxLoanAmount());
         existing.setPenaltyRatePercent(dto.getPenaltyRatePercent());
+        existing.setMaxLoansPerCustomerPerLoanType(
+            dto.getMaxLoansPerCustomerPerLoanType() > 0
+                ? dto.getMaxLoansPerCustomerPerLoanType()
+                : 3);
 
         loanTypeRepository.save(existing);
         return convertToDto(existing);
@@ -59,24 +66,30 @@ public class AdminLoanTypeService {
     public void deleteLoanType(Long id) {
         LoanType existing = loanTypeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Loan type not found"));
+
+        if (!existing.getLoans().isEmpty()) {
+            throw new RuntimeException("Loan type is in use and cannot be deleted.");
+        }
+
         loanTypeRepository.delete(existing);
     }
 
-    // ✅ New: Update config fields only (name, requirements, tenure, max amount)
     public LoanTypeDto updateLoanTypeConfig(Long id, LoanTypeDto dto) {
         LoanType existing = loanTypeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Loan type not found"));
 
         existing.setName(dto.getName());
-        existing.setRequirements(dto.getRequirements());
         existing.setMaxLoanAmount(dto.getMaxLoanAmount());
         existing.setMaxTenureYears(dto.getMaxTenureYears());
+        existing.setMaxLoansPerCustomerPerLoanType(
+            dto.getMaxLoansPerCustomerPerLoanType() > 0
+                ? dto.getMaxLoansPerCustomerPerLoanType()
+                : 3);
 
         loanTypeRepository.save(existing);
         return convertToDto(existing);
     }
 
-    // ✅ New: Update only interest & penalty rates
     public LoanTypeDto updateInterestAndPenaltyRates(Long id, LoanTypeDto dto) {
         LoanType existing = loanTypeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Loan type not found"));
@@ -88,16 +101,15 @@ public class AdminLoanTypeService {
         return convertToDto(existing);
     }
 
-    // 🔁 DTO conversion helper
     private LoanTypeDto convertToDto(LoanType loanType) {
         return LoanTypeDto.builder()
                 .loanTypeId(loanType.getLoanTypeId())
                 .name(loanType.getName())
                 .interestRate(loanType.getInterestRate())
-                .requirements(loanType.getRequirements())
                 .maxTenureYears(loanType.getMaxTenureYears())
                 .maxLoanAmount(loanType.getMaxLoanAmount())
                 .penaltyRatePercent(loanType.getPenaltyRatePercent())
+                .maxLoansPerCustomerPerLoanType(loanType.getMaxLoansPerCustomerPerLoanType())
                 .build();
     }
 }

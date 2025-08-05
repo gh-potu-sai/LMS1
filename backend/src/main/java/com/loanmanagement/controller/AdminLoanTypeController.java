@@ -42,14 +42,18 @@ public class AdminLoanTypeController {
         return ResponseEntity.ok(adminLoanTypeService.updateLoanType(id, dto));
     }
 
-    // ✅ Delete a loan type
+    // ✅ Delete a loan type (with 409 error if in use)
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        adminLoanTypeService.deleteLoanType(id);
-        return ResponseEntity.ok("Loan type deleted successfully");
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            adminLoanTypeService.deleteLoanType(id);
+            return ResponseEntity.ok("Loan type deleted successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(409).body(e.getMessage());
+        }
     }
 
-    // ✅ Only update configuration fields (name, requirements, maxTenure, maxAmount)
+    // ✅ Only update configuration fields (name, maxTenure, maxAmount, maxLoansPerCustomerPerLoanType)
     @PutMapping("/loan-type-config/{id}")
     public ResponseEntity<LoanTypeDto> updateLoanTypeConfig(@PathVariable Long id, @RequestBody LoanTypeDto dto) {
         return ResponseEntity.ok(adminLoanTypeService.updateLoanTypeConfig(id, dto));
