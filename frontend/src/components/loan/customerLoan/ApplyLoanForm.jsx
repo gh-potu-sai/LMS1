@@ -136,7 +136,10 @@ function ApplyLoanForm() {
           loanTypeId: lt.loan_type_id ?? lt.id ?? lt.loanTypeId ?? -1,
           maxLoanAmount: Number(lt.max_loan_amount ?? lt.maxLoanAmount ?? 0),
           maxTenureYears: Number(lt.max_tenure_years ?? lt.maxTenureYears ?? 30),
+          maxLoansPerCustomerPerLoanType: lt.max_loans_per_customer_per_loan_type ?? lt.maxLoansPerCustomerPerLoanType ?? 3,
         }));
+
+
 
         const validLoanTypes = mappedLoanTypes.filter((lt) => lt.loanTypeId !== -1);
 
@@ -181,29 +184,31 @@ function ApplyLoanForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "loanTypeId") {
-      const selectedId = Number(value);
-      const count = activeLoanCounts[selectedId] || 0;
+  if (name === "loanTypeId") {
+    const selectedId = Number(value);
+    const selectedLoanType = loanTypes.find((lt) => lt.loanTypeId === selectedId);
+    const count = activeLoanCounts[selectedId] ?? 0;
+    const maxAllowed = selectedLoanType?.maxLoansPerCustomerPerLoanType ?? 3;
 
-      if (count >= 3) {
-        toast.error("You have exceeded the limit of active loans for this loan type.");
-        // Reset selection to blank
-        setFormData((prev) => ({
-          ...prev,
-          loanTypeId: "",
-        }));
-        return;
-      }
-
-      // Proceed normally if within allowed limit
+    if (count >= maxAllowed) {
+      toast.error(`You can only apply for ${maxAllowed} active ${selectedLoanType?.name} loan(s).`);
       setFormData((prev) => ({
         ...prev,
-        [name]: selectedId,
-        loanAmount: "",
-        tenureYears: "",
+        loanTypeId: "",
       }));
       return;
     }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: selectedId,
+      loanAmount: "",
+      tenureYears: "",
+    }));
+    return;
+  }
+
+
 
 
     if (name === "loanAmount") {

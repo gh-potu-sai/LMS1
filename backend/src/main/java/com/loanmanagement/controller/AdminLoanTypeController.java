@@ -2,6 +2,8 @@ package com.loanmanagement.controller;
 
 import com.loanmanagement.dto.LoanTypeDto;
 import com.loanmanagement.service.AdminLoanTypeService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -60,8 +62,12 @@ public class AdminLoanTypeController {
     }
 
     // ✅ Only update financial fields (interest rate and penalty rate)
+
     @PutMapping("/interest-rate-config/{id}")
-    public ResponseEntity<LoanTypeDto> updateInterestAndPenaltyRates(@PathVariable Long id, @RequestBody LoanTypeDto dto) {
+    public ResponseEntity<LoanTypeDto> updateInterestAndPenaltyRates(
+        @PathVariable Long id,
+        @Valid @RequestBody LoanTypeDto dto) {
+
         return ResponseEntity.ok(adminLoanTypeService.updateInterestAndPenaltyRates(id, dto));
     }
 }
