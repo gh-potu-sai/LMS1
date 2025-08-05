@@ -55,10 +55,14 @@ function ApplyLoanForm() {
     employmentInfo,
     incomeRange,
     loanPurpose,
-    previousActiveLoans
+    previousActiveLoans,
+    loanAmount,
+    tenureYears,
+    loanTypeName
   ) => {
-    const baseScore = 300;
+    let score = 300;
 
+    // 🎯 Employment Mapping
     const employmentPointsMap = {
       "Software (IT)": 250,
       "Software (Non-IT)": 220,
@@ -71,7 +75,9 @@ function ApplyLoanForm() {
       "Education / Teaching": 190,
       Other: 140,
     };
+    score += employmentPointsMap[employmentInfo] ?? 140;
 
+    // 💰 Income Mapping
     const incomePointsMap = {
       "> ₹1,00,000": 300,
       "₹70,001 - ₹1,00,000": 260,
@@ -79,33 +85,38 @@ function ApplyLoanForm() {
       "< ₹30,000": 130,
       "N/A": 80,
     };
+    score += incomePointsMap[incomeRange] ?? 130;
 
-    const employmentPoints =
-      employmentPointsMap[employmentInfo] ?? employmentPointsMap.Other;
-    const incomePoints = incomePointsMap[incomeRange] ?? 130;
+    // 📝 Loan Purpose Analysis
+    const keywords = ["education", "medical", "business", "home", "travel", "wedding"];
+    const purposeLength = loanPurpose?.trim()?.length || 0;
+    const keywordMatch = keywords.some((k) =>
+      loanPurpose.toLowerCase().includes(k)
+    );
+    score += Math.min(purposeLength, 50); // Cap length contribution at 50
+    if (keywordMatch) score += 30;
 
-    const purposeLength = loanPurpose ? loanPurpose.trim().length : 0;
-    const purposePoints = Math.min(purposeLength, 100);
+    // 🪙 Loan Type Weighting
+    if (loanTypeName?.toLowerCase().includes("gold")) score += 30;
+    else if (loanTypeName?.toLowerCase().includes("personal")) score -= 20;
 
-    let loanCountDeduction = 0;
-    if (previousActiveLoans <= 0) loanCountDeduction = 0;
-    else if (previousActiveLoans <= 2) loanCountDeduction = 15;
-    else if (previousActiveLoans <= 5) loanCountDeduction = 40;
-    else if (previousActiveLoans <= 10) loanCountDeduction = 70;
-    else loanCountDeduction = 100;
+    // 🧮 Loan Amount Adjustments
+    if (loanAmount < 25000) score += 20;
+    if (incomeRange === "< ₹30,000" && loanAmount > 100000) score -= 50;
 
-    let score =
-      baseScore +
-      employmentPoints +
-      incomePoints +
-      purposePoints -
-      loanCountDeduction;
+    // ⏳ Tenure Penalty
+    if (tenureYears >= 10) score -= 30;
+    else if (tenureYears >= 5) score -= 10;
 
-    if (score < 300) score = 300;
-    if (score > 900) score = 900;
+    // 📉 Previous Active Loan Deduction (max 3)
+    if (previousActiveLoans === 1) score -= 20;
+    else if (previousActiveLoans === 2) score -= 35;
+    else if (previousActiveLoans === 3) score -= 50;
 
-    return Math.round(score);
+    // ✅ Clamp score
+    return Math.max(300, Math.min(900, Math.round(score)));
   };
+
 
   const [formData, setFormData] = useState(initialFormData);
   const [loanTypes, setLoanTypes] = useState([]);
@@ -280,26 +291,37 @@ function ApplyLoanForm() {
   };
 
   const generateCibilScore = () => {
+    const selectedLoanType = loanTypes.find(
+      (lt) => lt.loanTypeId === formData.loanTypeId
+    );
+
     if (
       !formData.employmentInfo ||
       !formData.income ||
       formData.loanPurpose.length < 3
     ) {
       toast.error(
-        "Please fill Employment Info, Income, and Purpose (min 3 chars) before generating CIBIL Score."
+        "Please fill all details before generating CIBIL Score."
       );
       return;
     }
-    const score = calculateCibilScore(
+
+  const numericLoanAmount = parseInt(parseCurrency(formData.loanAmount)) || 0;
+
+  const score = calculateCibilScore(
       formData.employmentInfo,
       formData.income,
       formData.loanPurpose,
-      activeLoanCounts[formData.loanTypeId] || 0
-
+      activeLoanCounts[formData.loanTypeId] || 0,
+      numericLoanAmount,
+      Number(formData.tenureYears),
+      selectedLoanType?.name || ""
     );
+
     setFormData((prev) => ({ ...prev, cibilScore: score.toString() }));
     toast.success("CIBIL Score generated successfully!");
   };
+
 
   const validate = () => {
   let errors = [];
