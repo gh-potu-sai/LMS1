@@ -399,9 +399,9 @@ function ApplyLoanForm() {
   } else if (
     !Number.isInteger(Number(formData.previousActiveLoans)) ||
     Number(formData.previousActiveLoans) < 0 ||
-    Number(formData.previousActiveLoans) > 100
+    Number(formData.previousActiveLoans) > 3
   ) {
-    errors.push("Previous loans must be a non-negative integer (max 100)");
+    errors.push("Previous loans must be a non-negative integer (max 3)");
   }
 
   if (!formData.cibilScore) {
@@ -579,8 +579,6 @@ function ApplyLoanForm() {
             />
           </div>
 
-          
-          
         </div>
 
         <div className="right-column">

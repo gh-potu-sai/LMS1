@@ -35,15 +35,18 @@ function LoanTypeConfig() {
     fetchLoanTypes();
   }, [fetchLoanTypes]);
 
-  const handleChange = (e) => {
+    const handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name === "maxLoanAmount") {
-      const numericValue = value.replace(/[^0-9]/g, "").slice(0, 9);
-      const formatted = new Intl.NumberFormat("en-IN").format(numericValue);
+      const raw = value.replace(/[^0-9]/g, "");
+
+      // ✅ Block inputs beyond 10 digits or > 1000000000 silently
+      if (raw.length > 10 || Number(raw) > 1000000000) return;
+
       setNewLoan((prev) => ({
         ...prev,
-        [name]: numericValue ? formatted : "",
+        [name]: raw, // store raw number
       }));
     } else if (name === "maxTenureYears") {
       const numericValue = value.replace(/[^0-9]/g, "").slice(0, 2);
@@ -55,6 +58,7 @@ function LoanTypeConfig() {
     }
   };
 
+
   const handleCreate = async () => {
     let { name, maxTenureYears, maxLoanAmount, maxLoansPerCustomerPerLoanType } = newLoan;
     if (!name || !maxTenureYears || !maxLoanAmount || !maxLoansPerCustomerPerLoanType) {
@@ -63,6 +67,7 @@ function LoanTypeConfig() {
     }
 
     maxLoanAmount = maxLoanAmount.replace(/,/g, "");
+
 
     try {
       const token = localStorage.getItem("token");
@@ -129,12 +134,22 @@ function LoanTypeConfig() {
     const { name, value } = e.target;
 
     if (name === "maxLoanAmount") {
-      const numericValue = value.replace(/[^0-9]/g, "").slice(0, 9);
-      const formatted = new Intl.NumberFormat("en-IN").format(numericValue);
+      const raw = value.replace(/[^0-9]/g, "");
+
+      if (raw.length > 10) return;
+
+      const maxAllowed = 1000000000;
+      if (Number(raw) > maxAllowed) {
+        toast.warn("Maximum allowed is ₹100,00,00,000 (100 Cr)");
+        return;
+      }
+
       setEditingLoan((prev) => ({
         ...prev,
-        [name]: numericValue ? formatted : "",
+        [name]: raw,
       }));
+
+
     } else if (name === "maxTenureYears") {
       const numericValue = value.replace(/[^0-9]/g, "").slice(0, 2);
       if (+numericValue <= 30) {
@@ -158,6 +173,7 @@ function LoanTypeConfig() {
     }
 
     maxLoanAmount = maxLoanAmount.replace(/,/g, "");
+
 
     try {
       const token = localStorage.getItem("token");
@@ -203,14 +219,21 @@ function LoanTypeConfig() {
           className="loan-type-input"
           maxLength={2}
         />
+        
         <input
           name="maxLoanAmount"
-          value={newLoan.maxLoanAmount}
+          value={
+            newLoan.maxLoanAmount
+              ? new Intl.NumberFormat("en-IN").format(newLoan.maxLoanAmount)
+              : ""
+          }
           onChange={handleChange}
           placeholder="Max Amount (₹)"
           className="loan-type-input"
-          maxLength={16}
         />
+
+
+
         <input
           type="number"
           name="maxLoansPerCustomerPerLoanType"
@@ -303,7 +326,17 @@ function LoanTypeConfig() {
             <input name="maxTenureYears" value={editingLoan.maxTenureYears} onChange={handleEditChange} />
 
             <label>Max Amount (₹)</label>
-            <input name="maxLoanAmount" value={editingLoan.maxLoanAmount} onChange={handleEditChange} />
+            <input
+              name="maxLoanAmount"
+              value={
+                newLoan.maxLoanAmount
+                  ? new Intl.NumberFormat("en-IN").format(newLoan.maxLoanAmount)
+                  : ""
+              }
+              onChange={handleChange}
+              placeholder="Max Amount (₹)"
+              className="loan-type-input"
+            />
 
             <label>Max Loans/Customer</label>
             <input

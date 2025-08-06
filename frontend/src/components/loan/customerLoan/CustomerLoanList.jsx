@@ -35,6 +35,9 @@ function CustomerLoanList() {
   const [sortOption, setSortOption] = useState("");
   
   const [showFilters, setShowFilters] = useState(false);
+  
+  const [loanTypes, setLoanTypes] = useState([]);
+
 
 
 
@@ -54,6 +57,30 @@ function CustomerLoanList() {
         setLoading(false);
       });
   }, []);
+  
+  useEffect(() => {
+    const fetchLoanTypes = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:8081/api/admin/loan-types", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch loan types");
+        }
+
+        const data = await res.json();
+        setLoanTypes(data);
+      } catch (err) {
+        console.error("Error fetching loan types:", err);
+        toast.error("Failed to load loan types");
+      }
+    };
+
+    fetchLoanTypes();
+  }, []);
+
 
   useEffect(() => {
     let result = [...loans]; 
@@ -215,13 +242,13 @@ function CustomerLoanList() {
               className="loan-filter-input"
             >
               <option value="All">All Types</option>
-              <option value="Home Loan">Home Loan</option>
-              <option value="Education Loan">Education Loan</option>
-              <option value="Personal Loan">Personal Loan</option>
-              <option value="Vehicle Loan">Vehicle Loan</option>
-              <option value="Business Loan">Business Loan</option>
-              <option value="Agricultural Loan">Agricultural Loan</option>
+              {loanTypes.map((type) => (
+                <option key={type.id} value={type.name}>
+                  {type.name}
+                </option>
+              ))}
             </select>
+
           </div>
           <div className="loan-filter-group">
             <label>From Date</label>

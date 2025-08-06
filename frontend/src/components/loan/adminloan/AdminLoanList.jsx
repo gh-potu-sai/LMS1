@@ -31,10 +31,10 @@ const AdminLoanList = () => {
   
   const [actionModal, setActionModal] = useState({ open: false, loan: null, status: "" });
   const [actionComment, setActionComment] = useState("");
+  
+  const [loanTypes, setLoanTypes] = useState([]);
 
   
-  
-
   const token = localStorage.getItem("token");
 
   const fetchLoans = useCallback(async () => {
@@ -47,6 +47,22 @@ const AdminLoanList = () => {
       toast.error("Failed to fetch loans");
     }
   }, [token]);
+  
+  useEffect(() => {
+    const fetchLoanTypes = async () => {
+      try {
+        const res = await axios.get("http://localhost:8081/api/admin/loan-types", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setLoanTypes(res.data);
+      } catch (err) {
+        toast.error("Failed to load loan types");
+      }
+    };
+
+    fetchLoanTypes();
+  }, [token]);
+
 
   useEffect(() => {
     fetchLoans();
@@ -66,6 +82,8 @@ const AdminLoanList = () => {
         setShowFilters(false);
       }
     };
+    
+    
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -84,6 +102,8 @@ const AdminLoanList = () => {
         return loanIdMatch || idMatch || typeMatch || nameMatch;
       });
     }
+    
+    
 
 
     if (statusFilter !== "All") {
@@ -167,13 +187,13 @@ const AdminLoanList = () => {
               className="admin-loan-filter-input"
             >
               <option value="All">All Types</option>
-              <option value="Home Loan">Home Loan</option>
-              <option value="Personal Loan">Personal Loan</option>
-              <option value="Business Loan">Business Loan</option>
-              <option value="Educational Loan">Educational Loan</option>
-              <option value="Vehicle Loan">Vehicle Loan</option>
-              <option value="Agricultural Loan">Agricultural Loan</option>
+              {loanTypes.map((type) => (
+                <option key={type.id} value={type.name}>
+                  {type.name}
+                </option>
+              ))}
             </select>
+
           </div>
           <div className="admin-loan-filter-group">
             <label>Sort By</label>
