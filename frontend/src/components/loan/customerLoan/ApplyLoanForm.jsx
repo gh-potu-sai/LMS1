@@ -121,13 +121,17 @@ function ApplyLoanForm() {
   const [formData, setFormData] = useState(initialFormData);
   const [loanTypes, setLoanTypes] = useState([]);
   
+  
+  
   const [activeLoanCounts, setActiveLoanCounts] = useState({});
 
   // Fetch loan types on mount
   useEffect(() => {
     fetch("http://localhost:8081/api/loan-types")
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch loan types");
+        if (!res.ok) {
+          throw new Error("Failed to fetch loan types");
+        }
         return res.json();
       })
       .then((data) => {
@@ -136,28 +140,27 @@ function ApplyLoanForm() {
           loanTypeId: lt.loan_type_id ?? lt.id ?? lt.loanTypeId ?? -1,
           maxLoanAmount: Number(lt.max_loan_amount ?? lt.maxLoanAmount ?? 0),
           maxTenureYears: Number(lt.max_tenure_years ?? lt.maxTenureYears ?? 30),
-          maxLoansPerCustomerPerLoanType: lt.max_loans_per_customer_per_loan_type ?? lt.maxLoansPerCustomerPerLoanType ?? 3,
+          maxLoansPerCustomerPerLoanType:
+            lt.max_loans_per_customer_per_loan_type ??
+            lt.maxLoansPerCustomerPerLoanType ??
+            3,
         }));
-
-
 
         const validLoanTypes = mappedLoanTypes.filter((lt) => lt.loanTypeId !== -1);
-
         setLoanTypes(validLoanTypes);
 
-        const defaultLoanType = validLoanTypes.find((lt) =>
-          lt.name?.toLowerCase().includes("personal")
-        );
-
+        // ✅ Set loanTypeId to "" to make "Select Loan Type" default
         setFormData((prev) => ({
           ...prev,
-          loanTypeId: defaultLoanType
-            ? defaultLoanType.loanTypeId
-            : validLoanTypes[0]?.loanTypeId || "",
+          loanTypeId: "",
         }));
       })
-      .catch(() => toast.error("Failed to load loan types"));
-  }, []);
+      .catch((error) => {
+        toast.error("Failed to load loan types");
+      });
+    }, []);
+
+
   
   useEffect(() => {
     const token = localStorage.getItem("token");
