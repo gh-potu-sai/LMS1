@@ -334,9 +334,17 @@ function ApplyLoanForm() {
   const validate = () => {
   let errors = [];
 
+  // ✅ Loan Type must be selected
+  if (!formData.loanTypeId || isNaN(Number(formData.loanTypeId))) {
+    toast.error("Please select a Loan Type.");
+    return false;
+  }
+
   const selectedLoanType = loanTypes.find(
-    (lt) => lt.loanTypeId === formData.loanTypeId
+    (lt) => lt.loanTypeId === Number(formData.loanTypeId)
   );
+  
+  
   const maxLoanAmount = selectedLoanType
     ? selectedLoanType.maxLoanAmount
     : Infinity;
