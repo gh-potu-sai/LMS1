@@ -29,10 +29,10 @@ public class LoanType {
     @Column(precision = 5, scale = 2)
     private BigDecimal interestRate;
 
+    @Builder.Default
     @Positive(message = "Max loans per customer must be greater than 0")
     @Max(value = 3, message = "Max loans per customer cannot exceed 3")
     private int maxLoansPerCustomerPerLoanType = 3; // default = 3
-
 
     @Min(value = 1, message = "Maximum tenure years must be at least 1")
     @Max(value = 30, message = "Maximum tenure years cannot exceed 30")

@@ -2,9 +2,9 @@ package com.loanmanagement.controller;
 
 import com.loanmanagement.dto.LoanRequestDto;
 import com.loanmanagement.model.Loan;
-import com.loanmanagement.model.Loan.LoanStatus;
+
 import com.loanmanagement.model.User;
-import com.loanmanagement.repository.LoanRepository;
+
 import com.loanmanagement.repository.UserRepository;
 import com.loanmanagement.service.CustomerLoanService;
 import com.loanmanagement.config.JwtUtil;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -28,9 +27,7 @@ public class CustomerLoanController {
 
     @Autowired
     private JwtUtil jwtUtil;
-    
-    @Autowired
-    private LoanRepository loanRepository;
+
 
     @Autowired
     private UserRepository userRepository;
