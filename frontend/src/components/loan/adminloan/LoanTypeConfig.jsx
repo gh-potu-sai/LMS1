@@ -10,7 +10,7 @@ function LoanTypeConfig() {
     name: "",
     maxTenureYears: "",
     maxLoanAmount: "",
-    interestRate: "5.5",
+    interestRate: "6.5",
     penaltyRatePercent: "1",
     maxLoansPerCustomerPerLoanType: "3"
   });

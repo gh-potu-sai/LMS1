@@ -1,14 +1,17 @@
-// DTO: Represents login input sent from the frontend (username + password)
-
 package com.loanmanagement.dto;
 
-// --- Imports ---
-import lombok.Data;  // Lombok generates getters, setters, toString, equals, and hashCode
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 
-
-@Data  // Automatically generates getter/setter and other utility methods
+@Data
 public class LoginRequest {
 
-    private String username;  // The username entered by the user
-    private String password;  // The password entered by the user
+    @NotBlank(message = "Username is required")
+    @Size(max = 30, message = "Username must not exceed 30 characters")
+    private String username;
+
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters")
+    private String password;
 }

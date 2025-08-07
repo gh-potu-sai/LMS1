@@ -1,6 +1,7 @@
 package com.loanmanagement.service;
 
 import com.loanmanagement.dto.LoanRequestDto;
+import com.loanmanagement.dto.LoanTypeActiveCountDto;
 import com.loanmanagement.model.Loan;
 import com.loanmanagement.model.Loan.LoanStatus;
 import com.loanmanagement.model.LoanType;
@@ -10,7 +11,10 @@ import com.loanmanagement.repository.LoanTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CustomerLoanService {
@@ -97,5 +101,31 @@ public class CustomerLoanService {
                         java.util.stream.Collectors.reducing(0, e -> 1, Integer::sum)
                 ));
     }
+    
+    public List<LoanTypeActiveCountDto> getActiveLoanCountsDetailed(User customer) {
+        List<Loan> activeLoans = loanRepository.findByCustomerAndLoanStatusIn(
+            customer,
+            List.of(Loan.LoanStatus.SUBMITTED, Loan.LoanStatus.APPROVED)
+        );
+
+        Map<Long, LoanTypeActiveCountDto> map = new HashMap<>();
+
+        for (Loan loan : activeLoans) {
+            Long loanTypeId = loan.getLoanType().getLoanTypeId();
+            String loanTypeName = loan.getLoanType().getName();
+
+            map.compute(loanTypeId, (id, existing) -> {
+                if (existing == null) {
+                    return new LoanTypeActiveCountDto(loanTypeId, loanTypeName, 1);
+                } else {
+                    existing.setCount(existing.getCount() + 1);
+                    return existing;
+                }
+            });
+        }
+
+        return new ArrayList<>(map.values());
+    }
+
 
 }

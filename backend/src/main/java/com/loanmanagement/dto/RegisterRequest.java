@@ -1,19 +1,35 @@
-// DTO: Used to capture registration input from the frontend
-
 package com.loanmanagement.dto;
 
 import com.loanmanagement.model.User.Role;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-@Data  // Lombok generates getters, setters, toString, equals, and hashCode
+@Data
 public class RegisterRequest {
 
-    private String username;     // Username chosen by the user
-    private String name;         // Full name of the user
-    private String email;        // Email ID
-    private String password;     // Plain-text password to be encrypted in service layer
-    private Role role;           // Role: USER or ADMIN
+    @NotBlank(message = "Username is required")
+    @Size(max = 30, message = "Username must not exceed 30 characters")
+    private String username;
 
-    // 🔐 Only required when role is ADMIN (for admin key validation)
+    @NotBlank(message = "Name is required")
+    @Size(max = 30, message = "Name must not exceed 30 characters")
+    private String name;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Please provide a valid email address")
+    @Size(max = 100, message = "Email must not exceed 100 characters")
+    private String email;
+
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters")
+    private String password;
+
+    @NotNull(message = "Role is required")
+    private Role role;
+
+    // Optional: Only required for admin registration (can validate separately)
     private String adminKey;
 }

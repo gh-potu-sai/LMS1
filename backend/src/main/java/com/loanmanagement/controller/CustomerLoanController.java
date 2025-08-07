@@ -1,14 +1,16 @@
 package com.loanmanagement.controller;
 
 import com.loanmanagement.dto.LoanRequestDto;
+import com.loanmanagement.dto.LoanTypeActiveCountDto;
 import com.loanmanagement.model.Loan;
-
 import com.loanmanagement.model.User;
-
 import com.loanmanagement.repository.UserRepository;
 import com.loanmanagement.service.CustomerLoanService;
 import com.loanmanagement.config.JwtUtil;
+
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid; // ✅ Import added
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +30,6 @@ public class CustomerLoanController {
     @Autowired
     private JwtUtil jwtUtil;
 
-
     @Autowired
     private UserRepository userRepository;
 
@@ -42,9 +43,9 @@ public class CustomerLoanController {
                 .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
     }
 
-    // If DTO validations are removed, remove @Valid here
+    // ✅ POST /api/customer/loans — validate DTO before applying loan
     @PostMapping
-    public Loan applyLoan(@RequestBody LoanRequestDto dto, HttpServletRequest request) {
+    public Loan applyLoan(@Valid @RequestBody LoanRequestDto dto, HttpServletRequest request) {
         User customer = getAuthenticatedCustomer(request);
         return loanService.applyLoan(dto, customer);
     }
@@ -60,13 +61,18 @@ public class CustomerLoanController {
         User customer = getAuthenticatedCustomer(request);
         return loanService.getLoanByIdForCustomer(id, customer);
     }
-    
-    
+
     @GetMapping("/active-loan-counts")
     public ResponseEntity<Map<Long, Integer>> getActiveLoanCounts(HttpServletRequest request) {
         User customer = getAuthenticatedCustomer(request);
         return ResponseEntity.ok(loanService.getActiveLoanCounts(customer));
     }
-
+    
+    // ✅ New version — with loanTypeId, name, and count
+    @GetMapping("/active-loan-counts-detailed")
+    public ResponseEntity<List<LoanTypeActiveCountDto>> getActiveLoanCountsDetailed(HttpServletRequest request) {
+        User customer = getAuthenticatedCustomer(request);
+        return ResponseEntity.ok(loanService.getActiveLoanCountsDetailed(customer));
+    }
 
 }

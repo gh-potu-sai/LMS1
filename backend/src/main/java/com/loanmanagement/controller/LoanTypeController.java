@@ -14,11 +14,13 @@ public class LoanTypeController {
     @Autowired
     private LoanTypeRepository loanTypeRepository;
 
+    // ✅ Get all loan types (public)
     @GetMapping
     public List<LoanType> getAllLoanTypes() {
         return loanTypeRepository.findAll();
     }
 
+    // ✅ Get loan type by ID with built-in global exception fallback
     @GetMapping("/{id}")
     public LoanType getLoanTypeById(@PathVariable Long id) {
         return loanTypeRepository.findById(id)
