@@ -1,6 +1,7 @@
 package com.loanmanagement.controller;
 
 import com.loanmanagement.dto.LoanRequestDto;
+import com.loanmanagement.dto.LoanStatusHistoryDto;
 import com.loanmanagement.dto.LoanTypeActiveCountDto;
 import com.loanmanagement.model.Loan;
 import com.loanmanagement.model.User;
@@ -74,5 +75,16 @@ public class CustomerLoanController {
         User customer = getAuthenticatedCustomer(request);
         return ResponseEntity.ok(loanService.getActiveLoanCountsDetailed(customer));
     }
+    
+    @GetMapping("/{loanId}/status-history")
+    public ResponseEntity<List<LoanStatusHistoryDto>> getStatusHistory(
+            @PathVariable Long loanId,
+            HttpServletRequest request) {
+
+        User customer = getAuthenticatedCustomer(request);
+        List<LoanStatusHistoryDto> history = loanService.getStatusHistoryByLoanId(loanId, customer);
+        return ResponseEntity.ok(history);
+    }
+
 
 }

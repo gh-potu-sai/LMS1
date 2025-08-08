@@ -12,7 +12,7 @@ public class LoanRequestDto {
     private Long loanTypeId;
 
     @NotNull(message = "Loan amount is required")
-    @DecimalMin(value = "500.00", message = "Loan amount must be at least ₹500")
+    @DecimalMin(value = "20000.00", message = "Loan amount must be at least ₹20,000")
     @DecimalMax(value = "1000000000.00", message = "Loan amount must not exceed ₹100 Crores")
     @Digits(integer = 13, fraction = 2, message = "Invalid loan amount format")
     private BigDecimal loanAmount;

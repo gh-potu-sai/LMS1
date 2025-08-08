@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
-import {
-  FaUser,
-  FaMoneyBillAlt,
-  FaFileAlt,
-  FaSignOutAlt,
-  FaSearch,
-  FaCreditCard,
-  FaIdBadge,
-  FaEnvelope
+import { 
+  FaUser, 
+  FaMoneyBillAlt, 
+  FaFileAlt, 
+  FaSignOutAlt, 
+  FaCreditCard, 
+  FaIdBadge, 
+  FaComments   // ✅ New Chat icon
 } from "react-icons/fa";
+
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../global/LogoutButton";
 import CustomerProfile from "./CustomerProfile";
 import ApplyLoanForm from "../loan/customerLoan/ApplyLoanForm";  // <-- Import here
 import CustomerLoanList from "../loan/customerLoan/CustomerLoanList";
+
 
 import "../../styles/dashboard/Dashboard.css";
 
@@ -80,12 +81,7 @@ function CustomerDashboard() {
           >
             <FaMoneyBillAlt /> Apply For Loan
           </button>
-          <button
-            className={activeSection === "status" ? "active" : ""}
-            onClick={() => setActiveSection("status")}
-          >
-            <FaSearch /> Status Tracking
-          </button>
+          
           <button
             className={activeSection === "payments" ? "active" : ""}
             onClick={() => setActiveSection("payments")}
@@ -99,11 +95,12 @@ function CustomerDashboard() {
             <FaIdBadge /> My Profile
           </button>
           <button
-            className={activeSection === "contact" ? "active" : ""}
-            onClick={() => setActiveSection("contact")}
+            className={activeSection === "chatSupport" ? "active" : ""}
+            onClick={() => setActiveSection("chatSupport")}
           >
-            <FaEnvelope /> Contact Us
+            <FaComments /> Chat Support
           </button>
+
         </nav>
 
         <div className="dashboard-logout">
@@ -117,11 +114,19 @@ function CustomerDashboard() {
         {activeSection === "apply" && <ApplyLoanForm />}
         {/* Keeping others commented for future */}
         {/* {activeSection === "dashboard" && <DashboardHome />} */}
+        {activeSection === "dashboard" && <h2>📈 dahsboards & Analytics Coming Soon</h2>}
+                
         {activeSection === "applications" && <CustomerLoanList />}
 
-        {/* {activeSection === "status" && <StatusTracking />} */}
+
         {/* {activeSection === "payments" && <EMIPayments />} */}
-        {/* {activeSection === "contact" && <ContactUsForm />} */}
+        {activeSection === "payments" && <h2>EMI & Payments Coming Soon</h2>}
+        
+        
+        {/* {activeSection === "chatSupport" && <chatSupport />} */}
+        {activeSection === "chatSupport" && <h2>Chat Support Coming Soon</h2>}
+
+        
       </main>
     </div>
   );

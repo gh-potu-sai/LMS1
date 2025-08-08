@@ -216,17 +216,18 @@ function ApplyLoanForm() {
 
     if (name === "loanAmount") {
       const numericValue = parseCurrency(value);
+
       const selectedLoanType = loanTypes.find(
         (lt) => lt.loanTypeId === formData.loanTypeId
       );
       const maxLoanAmount = selectedLoanType
         ? selectedLoanType.maxLoanAmount
-        : 500000000;
+        : 1000000000;
+
+      // Block if exceeds max
+      if (maxLoanAmount !== undefined && Number(numericValue) > maxLoanAmount) return;
 
       if (/^\d*$/.test(numericValue)) {
-        if (maxLoanAmount !== undefined && Number(numericValue) > maxLoanAmount)
-          return; // Block if exceeds max
-
         setFormData((prev) => ({
           ...prev,
           loanAmount: formatCurrency(value),
@@ -234,6 +235,8 @@ function ApplyLoanForm() {
       }
       return;
     }
+
+
 
     if (name === "tenureYears") {
       if (/^\d{0,2}$/.test(value)) {
@@ -354,8 +357,8 @@ function ApplyLoanForm() {
 
   const numericLoanAmount = parseInt(parseCurrency(formData.loanAmount));
 
-  if (!formData.loanAmount || numericLoanAmount < 500) {
-    errors.push("Loan amount must be at least ₹500");
+  if (!formData.loanAmount || numericLoanAmount < 20000) {
+    errors.push("Loan amount must be at least ₹20,000");
   } else if (numericLoanAmount > maxLoanAmount) {
     errors.push(`Loan amount cannot exceed ₹${maxLoanAmount.toLocaleString()}`);
   }
@@ -541,8 +544,10 @@ function ApplyLoanForm() {
               onChange={handleChange}
               required
             />
+            
             <small>
-              Max allowed amount: ₹
+              Min : ₹20,000 &nbsp;&nbsp;&nbsp;
+              Max allowed : ₹
               {formatCurrencyDisplay(
                 loanTypes.find((lt) => lt.loanTypeId === formData.loanTypeId)
                   ?.maxLoanAmount

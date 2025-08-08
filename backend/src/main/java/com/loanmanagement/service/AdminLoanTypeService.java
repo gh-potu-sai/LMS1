@@ -100,6 +100,7 @@ public class AdminLoanTypeService {
         loanTypeRepository.save(existing);
         return convertToDto(existing);
     }
+    
 
     private LoanTypeDto convertToDto(LoanType loanType) {
         return LoanTypeDto.builder()

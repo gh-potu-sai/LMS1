@@ -1,5 +1,9 @@
 package com.loanmanagement.service;
 
+import com.loanmanagement.dto.LoanStatusHistoryDto;
+import com.loanmanagement.model.ApplicationStatusHistory;
+import com.loanmanagement.repository.ApplicationStatusHistoryRepository;
+
 import com.loanmanagement.dto.LoanRequestDto;
 import com.loanmanagement.dto.LoanTypeActiveCountDto;
 import com.loanmanagement.model.Loan;
@@ -24,6 +28,10 @@ public class CustomerLoanService {
 
     @Autowired
     private LoanTypeRepository loanTypeRepository;
+    
+    // Inject the repository
+    @Autowired
+    private ApplicationStatusHistoryRepository statusHistoryRepository;
 
     public Loan applyLoan(LoanRequestDto dto, User customer) {
         LoanType loanType = loanTypeRepository.findById(dto.getLoanTypeId())
@@ -125,6 +133,26 @@ public class CustomerLoanService {
         }
 
         return new ArrayList<>(map.values());
+    }
+    
+    public List<LoanStatusHistoryDto> getStatusHistoryByLoanId(Long loanId, User customer) {
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new RuntimeException("Loan not found"));
+
+        // Validate ownership
+        if (!loan.getCustomer().getUserId().equals(customer.getUserId())) {
+            throw new RuntimeException("Access denied for this loan");
+        }
+
+        List<ApplicationStatusHistory> historyList = statusHistoryRepository.findByLoanOrderByUpdatedAtAsc(loan);
+
+        return historyList.stream()
+                .map(h -> LoanStatusHistoryDto.builder()
+                        .status(h.getStatus().name())
+                        .comments(h.getComments())
+                        .updatedAt(h.getUpdatedAt())
+                        .build())
+                .toList();
     }
 
 

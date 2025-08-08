@@ -22,15 +22,17 @@ public class LoanTypeDto {
     private int maxTenureYears;
 
     @NotNull(message = "Maximum loan amount is required")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Maximum loan amount must be positive")
+    @DecimalMin(value = "20000.00", inclusive = true, message = "Maximum loan amount must be at least ₹20,000")
     @DecimalMax(value = "1000000000.00", message = "Maximum loan amount must not exceed ₹100 Cr")
     private BigDecimal maxLoanAmount;
 
+
     @NotNull(message = "Interest rate is required")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Interest rate must be positive")
+    @DecimalMin(value = "6.5", inclusive = true, message = "Interest rate must be at least 6.5%")
     @DecimalMax(value = "15.0", message = "Interest rate cannot exceed 15 percent")
     @Digits(integer = 3, fraction = 2, message = "Interest rate format is invalid")
     private BigDecimal interestRate;
+
 
     @NotNull(message = "Penalty rate is required")
     @DecimalMin(value = "0.0", message = "Penalty rate cannot be negative")
