@@ -15,6 +15,7 @@ import AdminProfile from "./AdminProfile";
 import AdminLoanList from "../loan/adminloan/AdminLoanList";
 import LoanTypeConfig from "../loan/adminloan/LoanTypeConfig";
 import InterestPenaltyConfig from "../loan/adminloan/InterestPenaltyConfig";
+import UserManagementPage from "../loan/adminloan/UserManagementPage"; // ✅ Import new page
 
 import "../../styles/dashboard/Dashboard.css";
 
@@ -122,7 +123,7 @@ function AdminDashboard() {
         {activeSection === "loanConfig" && <LoanTypeConfig />}
         {activeSection === "interestPenalty" && <InterestPenaltyConfig />}
         {activeSection === "dashboard" && <h2>📊 Welcome to Admin Dashboard</h2>}
-        {activeSection === "userManagement" && <h2>🧑‍💼 User Management Coming Soon</h2>}
+        {activeSection === "userManagement" && <UserManagementPage />} {/* ✅ New Page */}
         {activeSection === "reports" && <h2>📈 Reports & Analytics Coming Soon</h2>}
       </main>
     </div>

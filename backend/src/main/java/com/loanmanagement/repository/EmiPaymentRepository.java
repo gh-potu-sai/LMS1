@@ -1,12 +1,16 @@
 package com.loanmanagement.repository;
 
-// Imports the EmiPayment entity for database operations
 import com.loanmanagement.model.EmiPayment;
-
-// Spring Data JPA interface providing CRUD methods
+import com.loanmanagement.model.Loan;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-// Repository interface for EmiPayment entity with Long as ID type
+import java.util.List;
+
 public interface EmiPaymentRepository extends JpaRepository<EmiPayment, Long> {
-    // No custom methods needed yet — inherits basic CRUD methods from JpaRepository
+
+    // ✅ Custom method to delete all EMI payments for a given loan
+    void deleteAllByLoan(Loan loan);
+
+    // (Optional) Get all EMI payments for a loan, ordered by payment date
+    List<EmiPayment> findByLoanOrderByPaymentDateAsc(Loan loan);
 }
