@@ -11,7 +11,7 @@ import {
     FaUser
 } from "react-icons/fa";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import EmiPaymentsPage from "../emi/EmiPaymentsPage"; // ✅ NEW
 import LogoutButton from "../global/LogoutButton";
 import ApplyLoanForm from "../loan/customerLoan/ApplyLoanForm";
@@ -22,6 +22,7 @@ import "../../styles/dashboard/Dashboard.css";
 
 function CustomerDashboard() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeSection, setActiveSection] = useState("dashboard");
   const [user, setUser] = useState({ name: "" });
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -39,6 +40,20 @@ function CustomerDashboard() {
       .then((data) => setUser(data))
       .catch(() => navigate("/login"));
   }, [navigate]);
+
+  // 🔗 Sync activeSection with URL path
+  useEffect(() => {
+    const p = location.pathname || "";
+    if (p.endsWith("/customer/dashboard/emi")) {
+      setActiveSection("payments");
+    } else if (p.endsWith("/customer/dashboard/profile")) {
+      setActiveSection("profile");
+    } else if (p.endsWith("/customer/dashboard/apply-loan")) {
+      setActiveSection("apply");
+    } else if (p.endsWith("/customer/dashboard")) {
+      setActiveSection("applications");
+    }
+  }, [location.pathname]);
 
   return (
     <div className="dashboard-container">
@@ -65,32 +80,32 @@ function CustomerDashboard() {
         <nav className="dashboard-nav">
           <button
             className={activeSection === "dashboard" ? "active" : ""}
-            onClick={() => setActiveSection("dashboard")}
+            onClick={() => { setActiveSection("dashboard"); navigate("/customer/dashboard"); }}
           >
             <FaUser /> Dashboard
           </button>
           <button
             className={activeSection === "applications" ? "active" : ""}
-            onClick={() => setActiveSection("applications")}
+            onClick={() => { setActiveSection("applications"); navigate("/customer/dashboard"); }}
           >
             <FaFileAlt /> My Applications
           </button>
           <button
             className={activeSection === "apply" ? "active" : ""}
-            onClick={() => setActiveSection("apply")}
+            onClick={() => { setActiveSection("apply"); navigate("/customer/dashboard/apply-loan"); }}
           >
             <FaMoneyBillAlt /> Apply For Loan
           </button>
           
           <button
             className={activeSection === "payments" ? "active" : ""}
-            onClick={() => setActiveSection("payments")}
+            onClick={() => { setActiveSection("payments"); navigate("/customer/dashboard/emi"); }}
           >
             <FaCreditCard /> EMI & Payments
           </button>
           <button
             className={activeSection === "profile" ? "active" : ""}
-            onClick={() => setActiveSection("profile")}
+            onClick={() => { setActiveSection("profile"); navigate("/customer/dashboard/profile"); }}
           >
             <FaIdBadge /> My Profile
           </button>
@@ -113,10 +128,7 @@ function CustomerDashboard() {
         {activeSection === "apply" && <ApplyLoanForm />}
         {activeSection === "dashboard" && <h2>📈 dahsboards & Analytics Coming Soon</h2>}
         {activeSection === "applications" && <CustomerLoanList />}
-
-        {/* ✅ Replace placeholder with real EMI page */}
         {activeSection === "payments" && <EmiPaymentsPage />}
-
         {activeSection === "chatSupport" && <h2>Chat Support Coming Soon</h2>}
       </main>
     </div>

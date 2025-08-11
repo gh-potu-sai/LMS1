@@ -1,12 +1,21 @@
 // src/components/emi/EmiPaymentsPage.jsx
-import { useEffect, useMemo, useState } from "react";
+
+import { useEffect, useMemo, useRef, useState } from "react";
+
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCustomerLoans, getLoanWithEmis, payEmi } from "../../services/emiService";
 import "../../styles/emi/EmiPayments.css";
 import EmiTable from "./EmiTable";
 
+import { useLocation } from "react-router-dom";
+
+
+
 export default function EmiPaymentsPage() {
+  const { state } = useLocation();            // ✅ use hook inside component
+  const preselectLoanId = state?.loanId ?? null; // ✅ safely read loanId
+
   const [loans, setLoans] = useState([]);
   const [loanDetails, setLoanDetails] = useState({}); // loanId -> LoanWithEmiDto
   const [loading, setLoading] = useState(true);
@@ -20,6 +29,8 @@ export default function EmiPaymentsPage() {
 
   // mobile filter panel
   const [showFilters, setShowFilters] = useState(false);
+
+
 
   useEffect(() => {
     (async () => {
@@ -41,6 +52,23 @@ export default function EmiPaymentsPage() {
       }
     })();
   }, []);
+  
+  
+  // one-time scroll to the selected loan, then clear state so it won't repeat
+  const didScrollRef = useRef(false);
+
+  useEffect(() => {
+    if (!loading && preselectLoanId && !didScrollRef.current) {
+      const el = document.getElementById(`loan-${preselectLoanId}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        el.classList.add("pulse-focus");
+        setTimeout(() => el.classList.remove("pulse-focus"), 1200);
+      }
+      didScrollRef.current = true; // ✅ prevents re-scroll after payment refresh
+    }
+  }, [loading, preselectLoanId]);
+
 
   const loanTypeOptions = useMemo(() => {
     const set = new Set((loans || []).map((l) => l.loanType?.name || l.loanType || "Other"));
@@ -53,7 +81,10 @@ export default function EmiPaymentsPage() {
     let arr = [...(loans || [])];
 
     // ✅ Hide rejected loans completely
-    arr = arr.filter((ln) => ln.loanStatus !== "REJECTED");
+    arr = arr.filter(
+      (ln) => ln.loanStatus !== "REJECTED" && ln.loanStatus !== "SUBMITTED"
+    );
+
 
     if (loanType !== "ALL") {
       arr = arr.filter((ln) => (ln.loanType?.name || ln.loanType) === loanType);
@@ -221,7 +252,7 @@ export default function EmiPaymentsPage() {
         {Object.entries(grouped).map(([loanTypeName, loanArr]) => (
           <div className="emi2-type-block" key={loanTypeName}>
             {loanArr.map((ln) => (
-              <div className="emi2-loan-card-and-table" key={ln.id}>
+              <div className="emi2-loan-card-and-table" key={ln.id} id={`loan-${ln.id}`}>
                 <div className="emi2-admin-table-wrapper">
                   <div className="emi2-admin-table-scroll">
                     <EmiTable

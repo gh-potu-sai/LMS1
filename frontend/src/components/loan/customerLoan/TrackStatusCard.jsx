@@ -56,12 +56,26 @@ function TrackStatusCard({ loan }) {
   }
 
 
+  // --- CLOSED comment (robust) ---
+  const closedEntry = loan.statusHistory?.find(
+    (s) => String(s.status || "").trim().toUpperCase() === "CLOSED"
+  );
+
   const closedComment =
-    loan.statusHistory?.find((s) => s.status === "CLOSED")?.comments ||
-    "Loan is not closed yet.";
+    String(loan.loanStatus || "").trim().toUpperCase() === "CLOSED"
+      ? (closedEntry?.comments && closedEntry.comments.trim()
+          ? closedEntry.comments
+          : "You have paid all your EMIs, your loan has been cleared. Thank You")
+      : "Loan is not closed yet.";
+
+
 
   const submittedDate = loan.submittedAt;
-  const closedDate = loan.statusHistory?.find((s) => s.status === "CLOSED")?.updatedAt;
+  // --- CLOSED date (robust + fallback) ---
+  const closedDate =
+    String(loan.loanStatus || "").trim().toUpperCase() === "CLOSED"
+      ? (closedEntry?.updatedAt || loan.closedAt || null)
+      : null;
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "N/A";

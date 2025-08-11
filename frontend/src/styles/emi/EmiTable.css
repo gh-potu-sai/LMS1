@@ -150,6 +150,23 @@
   margin-left: 10px;
 }
 
+/* Locked future EMIs — greyed out, no pointer events */
+.pay-btn.locked {
+  background-color: #ccc !important;
+  color: #666 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  opacity: 0.6;
+}
+
+/* Optional: grey the whole row too */
+.locked-row {
+  background-color: #f4f4f4;
+}
+.locked-row:hover {
+  background-color: #f4f4f4; /* no hover effect */
+}
+
 
 
 /* =================== responsive @ 1111px =================== */

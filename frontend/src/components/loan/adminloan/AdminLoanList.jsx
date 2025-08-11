@@ -172,12 +172,13 @@ const AdminLoanList = () => {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="admin-loan-filter-input"
             >
-              <option value="All">All</option>
-              <option value="SUBMITTED">Submitted</option>
-              <option value="APPROVED">Approved</option>
-              <option value="REJECTED">Rejected</option>
-              <option value="CLOSED">Closed</option>
+              <option key="all" value="All">All</option>
+              <option key="submitted" value="SUBMITTED">Submitted</option>
+              <option key="approved" value="APPROVED">Approved</option>
+              <option key="rejected" value="REJECTED">Rejected</option>
+              <option key="closed" value="CLOSED">Closed</option>
             </select>
+
           </div>
           <div className="admin-loan-filter-group">
             <label>Loan Type</label>
@@ -186,12 +187,13 @@ const AdminLoanList = () => {
               onChange={(e) => setTypeFilter(e.target.value)}
               className="admin-loan-filter-input"
             >
-              <option value="All">All Types</option>
-              {loanTypes.map((type) => (
-                <option key={type.id} value={type.name}>
+              <option key="all-types" value="All">All Types</option>
+              {loanTypes.map((type, idx) => (
+                <option key={`${type?.id ?? type?.name ?? idx}-${idx}`} value={type.name}>
                   {type.name}
                 </option>
               ))}
+
             </select>
 
           </div>
@@ -202,10 +204,11 @@ const AdminLoanList = () => {
               onChange={(e) => setSortBy(e.target.value)}
               className="admin-loan-filter-input"
             >
-              <option value="">None</option>
-              <option value="amount">Amount</option>
-              <option value="date">Date</option>
+              <option key="none" value="">None</option>
+              <option key="amount" value="amount">Amount</option>
+              <option key="date" value="date">Date</option>
             </select>
+
           </div>
         </div>
       </div>

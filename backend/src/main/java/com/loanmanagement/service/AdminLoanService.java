@@ -91,10 +91,10 @@ public class AdminLoanService {
     }
 
     public void updateLoanStatus(Long id, LoanStatusUpdateRequest request) {
-    Loan loan = loanRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Loan not found"));
+        Loan loan = loanRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Loan not found"));
 
-    Loan.LoanStatus newStatus = request.getStatus();
+        Loan.LoanStatus newStatus = request.getStatus();
         loan.setLoanStatus(newStatus);
 
         if (newStatus == Loan.LoanStatus.CLOSED) {
@@ -128,15 +128,14 @@ public class AdminLoanService {
         historyRepository.save(history);
     }
 
-
     @Transactional
     public void deleteLoan(Long id) {
         Loan loan = loanRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Loan not found"));
 
-        // Allow deletion only if CLOSED
-        if (loan.getLoanStatus() != Loan.LoanStatus.CLOSED) {
-            throw new RuntimeException("Loan can only be deleted if it is CLOSED");
+        // ✅ Allow deletion if loan is REJECTED or CLOSED (unchanged logic otherwise)
+        if (!(loan.getLoanStatus() == Loan.LoanStatus.REJECTED || loan.getLoanStatus() == Loan.LoanStatus.CLOSED)) {
+            throw new RuntimeException("Loan can only be deleted if it is REJECTED or CLOSED");
         }
 
         // Delete related EMI records
@@ -145,7 +144,7 @@ public class AdminLoanService {
         // Delete related status history records
         historyRepository.deleteAllByLoan(loan);
 
-        // Delete loan
+        // Finally, delete the loan
         loanRepository.delete(loan);
     }
 }

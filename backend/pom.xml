@@ -58,6 +58,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
       <artifactId>mysql-connector-j</artifactId>
       <scope>runtime</scope>
     </dependency>
+    
+
 
     <!-- ✅ Updated JWT for Java 11+ -->
     <dependency>
