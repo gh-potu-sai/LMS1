@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { 
-  FaUser, 
-  FaMoneyBillAlt, 
-  FaFileAlt, 
-  FaSignOutAlt, 
-  FaCreditCard, 
-  FaIdBadge, 
-  FaComments   // ✅ New Chat icon
+// src/components/dashboard/CustomerDashboard.jsx
+
+import { useEffect, useState } from "react";
+import {
+    FaComments,
+    FaCreditCard,
+    FaFileAlt,
+    FaIdBadge,
+    FaMoneyBillAlt,
+    FaSignOutAlt,
+    FaUser
 } from "react-icons/fa";
 
 import { useNavigate } from "react-router-dom";
+import EmiPaymentsPage from "../emi/EmiPaymentsPage"; // ✅ NEW
 import LogoutButton from "../global/LogoutButton";
-import CustomerProfile from "./CustomerProfile";
-import ApplyLoanForm from "../loan/customerLoan/ApplyLoanForm";  // <-- Import here
+import ApplyLoanForm from "../loan/customerLoan/ApplyLoanForm";
 import CustomerLoanList from "../loan/customerLoan/CustomerLoanList";
-
+import CustomerProfile from "./CustomerProfile";
 
 import "../../styles/dashboard/Dashboard.css";
 
@@ -31,9 +33,7 @@ function CustomerDashboard() {
     if (!token) navigate("/login");
 
     fetch("http://localhost:8081/api/customer/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => setUser(data))
@@ -100,7 +100,6 @@ function CustomerDashboard() {
           >
             <FaComments /> Chat Support
           </button>
-
         </nav>
 
         <div className="dashboard-logout">
@@ -112,21 +111,13 @@ function CustomerDashboard() {
       <main className="dashboard-main">
         {activeSection === "profile" && <CustomerProfile />}
         {activeSection === "apply" && <ApplyLoanForm />}
-        {/* Keeping others commented for future */}
-        {/* {activeSection === "dashboard" && <DashboardHome />} */}
         {activeSection === "dashboard" && <h2>📈 dahsboards & Analytics Coming Soon</h2>}
-                
         {activeSection === "applications" && <CustomerLoanList />}
 
+        {/* ✅ Replace placeholder with real EMI page */}
+        {activeSection === "payments" && <EmiPaymentsPage />}
 
-        {/* {activeSection === "payments" && <EMIPayments />} */}
-        {activeSection === "payments" && <h2>EMI & Payments Coming Soon</h2>}
-        
-        
-        {/* {activeSection === "chatSupport" && <chatSupport />} */}
         {activeSection === "chatSupport" && <h2>Chat Support Coming Soon</h2>}
-
-        
       </main>
     </div>
   );

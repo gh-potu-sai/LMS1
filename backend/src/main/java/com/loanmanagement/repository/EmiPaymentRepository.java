@@ -13,4 +13,15 @@ public interface EmiPaymentRepository extends JpaRepository<EmiPayment, Long> {
 
     // (Optional) Get all EMI payments for a loan, ordered by payment date
     List<EmiPayment> findByLoanOrderByPaymentDateAsc(Loan loan);
+
+    long countByLoan(Loan loan);
+
+    // fetch EMIs in due-date order (use this in CustomerLoanService)
+    List<EmiPayment> findByLoanOrderByDueDateAsc(Loan loan);
+
+    // (optional) if you prefer by loanId, you can also keep this
+    List<EmiPayment> findByLoanIdOrderByDueDateAsc(Long loanId);
+
+    // ✅ NEW: count remaining PENDING EMIs
+    long countByLoanAndStatus(Loan loan, EmiPayment.EmiStatus status);
 }
