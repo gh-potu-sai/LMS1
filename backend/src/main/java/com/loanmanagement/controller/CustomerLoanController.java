@@ -88,11 +88,13 @@ public class CustomerLoanController {
     @GetMapping("/emi/{loanId}")
     public ResponseEntity<LoanWithEmiDto> getLoanWithEmis(@PathVariable Long loanId, HttpServletRequest request) {
         User customer = getAuthenticatedCustomer(request);
-        Loan loan = loanService.getLoanByIdForCustomer(loanId, customer); // ownership validation
-        return ResponseEntity.ok(loanService.getLoanWithEmis(loan.getId()));
+        // validate ownership
+        loanService.getLoanByIdForCustomer(loanId, customer);
+        return ResponseEntity.ok(loanService.getLoanWithEmis(loanId));
     }
 
-    // ✅ New Pay EMI endpoint
+
+    // ✅ Pay EMI endpoint (triggers email via service)
     @PostMapping("/emi/pay/{emiId}")
     public ResponseEntity<EmiPayment> payEmi(@PathVariable Long emiId, HttpServletRequest request) {
         User customer = getAuthenticatedCustomer(request);

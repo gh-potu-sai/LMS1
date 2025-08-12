@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,8 +18,9 @@ public class AdminLoanService {
 
     private final LoanRepository loanRepository;
     private final ApplicationStatusHistoryRepository historyRepository;
-    private final EmiPaymentRepository emiPaymentRepository; // ✅ Injected
+    private final EmiPaymentRepository emiPaymentRepository;
     private final EmiGenerationService emiGenerationService;
+    private final MailService mailService; // ✅ added
 
     public List<AdminLoanSummaryDto> getAllLoans() {
         return loanRepository.findAll().stream().map(loan -> {
@@ -110,6 +112,14 @@ public class AdminLoanService {
                 }
             }
             emiPaymentRepository.saveAll(emis);
+
+            // ✅ Compute total repayable (sum of all EMIs) and send closure email
+            try {
+                BigDecimal totalRepayable = emis.stream()
+                        .map(EmiPayment::getAmount)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+                mailService.sendLoanClosedText(loan, totalRepayable);
+            } catch (Exception ignore) { /* don’t block admin flow on email */ }
         }
 
         if (newStatus == Loan.LoanStatus.APPROVED) {
@@ -133,18 +143,13 @@ public class AdminLoanService {
         Loan loan = loanRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Loan not found"));
 
-        // ✅ Allow deletion if loan is REJECTED or CLOSED (unchanged logic otherwise)
+        // Allow deletion only if REJECTED or CLOSED
         if (!(loan.getLoanStatus() == Loan.LoanStatus.REJECTED || loan.getLoanStatus() == Loan.LoanStatus.CLOSED)) {
             throw new RuntimeException("Loan can only be deleted if it is REJECTED or CLOSED");
         }
 
-        // Delete related EMI records
         emiPaymentRepository.deleteAllByLoan(loan);
-
-        // Delete related status history records
         historyRepository.deleteAllByLoan(loan);
-
-        // Finally, delete the loan
         loanRepository.delete(loan);
     }
 }

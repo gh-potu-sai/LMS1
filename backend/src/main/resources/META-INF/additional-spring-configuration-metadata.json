@@ -1,0 +1,102 @@
+{"properties": [
+  {
+    "name": "spring.mvc.cors.allowed-origins",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.mvc.cors.allowed-origins'"
+  },
+  {
+    "name": "DB_USERNAME",
+    "type": "java.lang.String",
+    "description": "A description for 'DB_USERNAME'"
+  },
+  {
+    "name": "DB_PASSWORD",
+    "type": "java.lang.String",
+    "description": "A description for 'DB_PASSWORD'"
+  },
+  {
+    "name": "JWT_SECRET",
+    "type": "java.lang.String",
+    "description": "A description for 'JWT_SECRET'"
+  },
+  {
+    "name": "JWT_EXPIRATION",
+    "type": "java.lang.String",
+    "description": "A description for 'JWT_EXPIRATION'"
+  },
+  {
+    "name": "ADMIN_SECRET",
+    "type": "java.lang.String",
+    "description": "A description for 'ADMIN_SECRET'"
+  },
+  {
+    "name": "super.admin.key",
+    "type": "java.lang.String",
+    "description": "A description for 'super.admin.key'"
+  },
+  {
+    "name": "MAIL_USERNAME",
+    "type": "java.lang.String",
+    "description": "A description for 'MAIL_USERNAME'"
+  },
+  {
+    "name": "MAIL_PASSWORD",
+    "type": "java.lang.String",
+    "description": "A description for 'MAIL_PASSWORD'"
+  },
+  {
+    "name": "MAIL_PASSWORD",
+    "type": "java.lang.String",
+    "description": "A description for 'MAIL_PASSWORD'"
+  },
+  {
+    "name": "app.admin.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'app.admin.secret'"
+  },
+  {
+    "name": "mail.from",
+    "type": "java.lang.String",
+    "description": "A description for 'mail.from'"
+  },
+  {
+    "name": "jwt.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.expiration'"
+  },
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.secret'"
+  },
+  {
+    "name": "MAIL_PASSWORD",
+    "type": "java.lang.String",
+    "description": "A description for 'MAIL_PASSWORD'"
+  },
+  {
+    "name": "MAIL_PASSWORD",
+    "type": "java.lang.String",
+    "description": "A description for 'MAIL_PASSWORD'"
+  },
+  {
+    "name": "MAIL_USERNAME",
+    "type": "java.lang.String",
+    "description": "A description for 'MAIL_USERNAME'"
+  },
+  {
+    "name": "ADMIN_SECRET",
+    "type": "java.lang.String",
+    "description": "A description for 'ADMIN_SECRET'"
+  },
+  {
+    "name": "ADMIN_SECRET",
+    "type": "java.lang.String",
+    "description": "A description for 'ADMIN_SECRET'"
+  },
+  {
+    "name": "DB_USERNAME",
+    "type": "java.lang.String",
+    "description": "A description for 'DB_USERNAME'"
+  }
+]}

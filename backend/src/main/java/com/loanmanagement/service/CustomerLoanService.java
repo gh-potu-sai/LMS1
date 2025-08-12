@@ -14,14 +14,18 @@ import com.loanmanagement.repository.ApplicationStatusHistoryRepository;
 import com.loanmanagement.repository.EmiPaymentRepository;
 import com.loanmanagement.repository.LoanRepository;
 import com.loanmanagement.repository.LoanTypeRepository;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDateTime;   // <-- import
+import java.time.LocalDateTime;
 import java.util.*;
 
+@RequiredArgsConstructor
 @Service
 public class CustomerLoanService {
 
@@ -36,6 +40,8 @@ public class CustomerLoanService {
 
     @Autowired
     private EmiPaymentRepository emiPaymentRepository;
+
+    private final MailService mailService;
 
     public Loan applyLoan(LoanRequestDto dto, User customer) {
         LoanType loanType = loanTypeRepository.findById(dto.getLoanTypeId())
@@ -170,7 +176,8 @@ public class CustomerLoanService {
         );
     }
 
-    // ✅ Pay EMI + auto-close loan when last EMI paid
+    // ✅ Pay EMI + auto-close loan when last EMI paid (also email loan closure)
+    @Transactional
     public EmiPayment payEmi(Long emiId, User customer) {
         EmiPayment emi = emiPaymentRepository.findById(emiId)
                 .orElseThrow(() -> new RuntimeException("EMI not found"));
@@ -188,7 +195,12 @@ public class CustomerLoanService {
         emi.setStatus(EmiPayment.EmiStatus.PAID);
         emi.setPaymentDate(java.time.LocalDate.now());
         emi.setTransactionRef(java.util.UUID.randomUUID().toString());
+
+        // save first
         EmiPayment saved = emiPaymentRepository.save(emi);
+
+        // 🔔 send plain-text payment receipt (non-blocking try/catch)
+        try { mailService.sendEmiPaidText(saved); } catch (Exception ignore) {}
 
         // 🔒 If no more PENDING EMIs, close the loan
         Loan loan = saved.getLoan();
@@ -197,6 +209,17 @@ public class CustomerLoanService {
             loan.setLoanStatus(LoanStatus.CLOSED);
             loan.setClosedAt(LocalDateTime.now());
             loanRepository.save(loan);
+
+            // compute totals for closure email: total repayable = sum of all EMIs
+            try {
+                List<EmiPayment> allEmis = emiPaymentRepository.findByLoanOrderByDueDateAsc(loan);
+                BigDecimal totalRepayable = allEmis.stream()
+                        .map(EmiPayment::getAmount)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add)
+                        .setScale(2, RoundingMode.HALF_UP);
+
+                mailService.sendLoanClosedText(loan, totalRepayable);
+            } catch (Exception ignore) {}
         }
 
         return saved;
