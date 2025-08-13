@@ -19,6 +19,8 @@ import AdminLoanList from "../loan/adminloan/AdminLoanList";
 import LoanTypeConfig from "../loan/adminloan/LoanTypeConfig";
 import InterestPenaltyConfig from "../loan/adminloan/InterestPenaltyConfig";
 import UserManagementPage from "../loan/adminloan/UserManagementPage";
+import AdminDashboardMain from "./AdminDashboardMain";
+
 import AdminChat from "../chat/AdminChat";
 
 import "../../styles/dashboard/Dashboard.css";
@@ -73,7 +75,7 @@ function AdminDashboard() {
   const renderMainContent = () => {
     switch (activeSection) {
       case "dashboard":
-        return <h2>📊 Welcome to Admin Dashboard</h2>;
+        return <AdminDashboardMain />;
       case "userManagement":
         return <UserManagementPage />;
       case "loanApplications":

@@ -27,5 +27,9 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
     // Delete all loans for a specific customer
     void deleteAllByCustomer(User customer);
     
+    long countByLoanStatus(Loan.LoanStatus status);
+    List<Loan> findAllByLoanStatus(Loan.LoanStatus status);
+
+    
     
 }

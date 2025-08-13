@@ -24,4 +24,7 @@ public interface EmiPaymentRepository extends JpaRepository<EmiPayment, Long> {
 
     // ✅ NEW: count remaining PENDING EMIs
     long countByLoanAndStatus(Loan loan, EmiPayment.EmiStatus status);
+    
+    List<EmiPayment> findByStatus(EmiPayment.EmiStatus status);
+
 }

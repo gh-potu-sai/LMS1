@@ -18,6 +18,7 @@ import ApplyLoanForm from "../loan/customerLoan/ApplyLoanForm";
 import CustomerLoanList from "../loan/customerLoan/CustomerLoanList";
 import EmiPaymentsPage from "../emi/EmiPaymentsPage";
 import CustomerChat from "../chat/CustomerChat";
+import CustomerDashboardMain from "./CustomerDashboardMain"; // ✅ NEW
 
 import "../../styles/dashboard/Dashboard.css";
 
@@ -73,7 +74,7 @@ function CustomerDashboard() {
     if (p.endsWith("/customer/dashboard/emi")) setActiveSection("payments");
     else if (p.endsWith("/customer/dashboard/profile")) setActiveSection("profile");
     else if (p.endsWith("/customer/dashboard/apply-loan")) setActiveSection("apply");
-    else if (p.endsWith("/customer/dashboard")) setActiveSection("applications");
+    else if (p.endsWith("/customer/dashboard")) setActiveSection("dashboard"); // ✅ fixed here
   }, [location.pathname]);
 
   if (loadingUser) {
@@ -155,7 +156,10 @@ function CustomerDashboard() {
       {/* Main Section */}
       <main className="dashboard-main">
         {activeSection === "dashboard" && (
-          <h2>📈 Dashboard & Analytics Coming Soon</h2>
+          <CustomerDashboardMain
+            activeSection={activeSection}
+            setActiveSection={setActiveSection}
+          />
         )}
         {activeSection === "applications" && <CustomerLoanList />}
         {activeSection === "apply" && <ApplyLoanForm />}
