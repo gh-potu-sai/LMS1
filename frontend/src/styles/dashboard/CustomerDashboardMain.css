@@ -1,0 +1,212 @@
+/* src/styles/dashboard/CustomerDashboardMain.css */
+
+.cdm-wrapper {
+  padding: 2rem;
+  background-color: #f4f9ff;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ========== STATS ========== */
+.cdm-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.cdm-stat-box {
+  background-color: #12457b;
+  color: white;
+  padding: 1rem 1.2rem;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.cdm-stat-box svg {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.cdm-stat-box p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.cdm-stat-box h3 {
+  margin: 5px 0 0;
+}
+
+/* ========== LAYOUT ========== */
+.cdm-main-columns {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+/* ========== APPLICATIONS SECTION ========== */
+.cdm-applications {
+  background: rgb(221, 224, 227);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 6px 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+.cdm-applications h2 {
+  margin-bottom: 6px;
+  color: #023d6b;
+}
+
+/* Scroll container for applications */
+.cdm-applications-scroll {
+  max-height: 360px;  /* Adjust as needed */
+  overflow-y: auto;
+  margin-top: 1rem;
+  padding-right: 8px;
+}
+
+.cdm-applications-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cdm-applications-scroll::-webkit-scrollbar-thumb {
+  background-color: #b0b3b6;
+  border-radius: 4px;
+}
+
+.cdm-applications-scroll::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* ========== LOAN CARD ========== */
+.cdm-loan-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f1f5f9;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  border: 1px solid #e0e6f0;
+  gap: 1.2rem;
+}
+
+.cdm-loan-left {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.cdm-loan-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #e3eaf3;
+}
+
+.cdm-loan-type {
+  font-size: 16px;
+  font-weight: 600;
+  color: #023d6b;
+  margin-bottom: 4px;
+}
+
+.cdm-loan-id {
+  font-size: 13px;
+  color: #555;
+}
+
+.cdm-loan-middle {
+  flex: 1;
+  text-align: center;
+}
+
+.cdm-loan-middle h3 {
+  font-size: 17px;
+  color: #023d6b;
+  margin-bottom: 6px;
+}
+
+.cdm-loan-middle p {
+  font-size: 13px;
+  margin: 2px 0;
+  color: #444;
+}
+
+.cdm-loan-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+}
+
+.cdm-status-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-align: center;
+  display: inline-block;
+}
+
+.cdm-status-badge.approved {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.cdm-status-badge.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.cdm-status-badge.submitted {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.cdm-loan-right button {
+  background-color: #023d6b;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* ========== EMI REMINDER ========== */
+.cdm-emi-reminder {
+  background: rgb(221, 224, 227);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.05);
+}
+
+.cdm-emi-reminder h2 {
+  margin-bottom: 1rem;
+  color: #023d6b;
+}
+
+.cdm-emi-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f1f5f9;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.cdm-emi-icon {
+  font-size: 22px;
+  color: #023d6b;
+  margin-right: 10px;
+}
+
+.cdm-empty {
+  font-size: 14px;
+  color: #475569;
+}

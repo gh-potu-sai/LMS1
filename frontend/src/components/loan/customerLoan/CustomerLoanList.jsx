@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom"; 
+
 import "../../../styles/loan/customerLoan/CustomerLoanList.css";
+
 import LoanDetailCard from "./LoanDetailCard";
+import TrackStatusCard from "./TrackStatusCard";
+
+
 import { ToastContainer, toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 
 
@@ -18,6 +25,8 @@ import AgriculturalLoanImg from "../../../assets/Agricultural_Loan.png";
 
 import { FiSend, FiCheckCircle, FiXCircle, FiLock } from "react-icons/fi";
 import { FaTimes } from "react-icons/fa";
+import { FiEye } from "react-icons/fi";
+
 
 function CustomerLoanList() {
   const [loans, setLoans] = useState([]);
@@ -37,6 +46,10 @@ function CustomerLoanList() {
   const [showFilters, setShowFilters] = useState(false);
   
   const [loanTypes, setLoanTypes] = useState([]);
+  
+  const [trackingLoan, setTrackingLoan] = useState(null);
+  
+  const navigate = useNavigate();
 
 
 
@@ -196,12 +209,15 @@ function CustomerLoanList() {
     
     <div className="loan-page-wrapper">
       
-      <button
-        className="toggle-filters-btn"
-        onClick={() => setShowFilters(prev => !prev)}
-      >
-        {showFilters ? "Hide Filters" : "Show Filters"}
-      </button>
+      {!selectedLoan && !trackingLoan && (
+        <button
+          className="toggle-filters-btn"
+          onClick={() => setShowFilters(prev => !prev)}
+        >
+          {showFilters ? "Hide Filters" : "Show Filters"}
+        </button>
+      )}
+
 
       {/* 🔍 Fixed Top Filter Section */}
       <div className={`loan-filter-fixed ${showFilters ? "open" : ""}`}>
@@ -242,11 +258,12 @@ function CustomerLoanList() {
               className="loan-filter-input"
             >
               <option value="All">All Types</option>
-              {loanTypes.map((type) => (
-                <option key={type.id} value={type.name}>
+              {loanTypes.map((type, index) => (
+                <option key={type.id || index} value={type.name}>
                   {type.name}
                 </option>
               ))}
+
             </select>
 
           </div>
@@ -387,12 +404,63 @@ function CustomerLoanList() {
                     {loan.loanStatus === "REJECTED" && <><FiXCircle style={{ marginRight: "5px" }} />REJECTED</>}
                     {loan.loanStatus === "CLOSED" && <><FiLock style={{ marginRight: "5px" }} />CLOSED</>}
                   </span>
+                  
+                  
                   <div className="loan-action-buttons">
-                    <button className="view-btn" onClick={() => setSelectedLoan(loan)}>View Details</button>
-                    <button className="track-btn">
-                      {loan.loanStatus === "APPROVED" ? "EMI Schedule" : "Track Status"}
+                    {/* View Details */}
+                    <div className="tooltip-wrapper">
+                      <button
+                        className="icon-btn"
+                        onClick={() => setSelectedLoan(loan)}
+                      >
+                        <FiEye size={18} />
+                      </button>
+                      <span className="tooltip-text">Click to view full details</span>
+                    </div>
+
+
+                    {/* Track Status */}
+                    <button
+                      className="track-btn"
+                      onClick={() => setTrackingLoan(loan)}
+                    >
+                      Track Status
                     </button>
+
+                    {/* EMI Schedule - disabled unless approved or closed */}
+                    <div className="emi-btn-wrapper">
+                      <button
+                        className="emi-btn"
+                        disabled={!(loan.loanStatus === "APPROVED" || loan.loanStatus === "CLOSED")}
+                        onClick={() => {
+                          if (loan.loanStatus === "APPROVED" || loan.loanStatus === "CLOSED") {
+                            // Go to EMI & Payments page
+
+                            navigate("/customer/dashboard/emi", { state: { loanId: loan.id } });
+                            
+
+                            // If you want to auto-focus a specific loan there, use:
+                            // navigate("/customer/dashboard/emi", { state: { loanId: loan.id } });
+                          }
+                        }}
+                      >
+                        EMI Schedule
+                      </button>
+
+                      {!(loan.loanStatus === "APPROVED" || loan.loanStatus === "CLOSED") && (
+                        <span className="emi-tooltip">
+                          Available after <br />loan approval or closure
+                        </span>
+                      )}
+                    </div>
+
+
+                    
+                    
                   </div>
+
+                  
+                  
                 </div>
               </div>
 
@@ -417,6 +485,19 @@ function CustomerLoanList() {
           </div>
         </div>
       )}
+      
+      {/* 📍 Track Status Modal */}
+      {trackingLoan && (
+        <div className="loan-modal-overlay" onClick={() => setTrackingLoan(null)}>
+          <div className="loan-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-icon" onClick={() => setTrackingLoan(null)}>
+              <FaTimes size={18} />
+            </button>
+            <TrackStatusCard loan={trackingLoan} />
+          </div>
+        </div>
+      )}
+
 
       
       <ToastContainer position="top-center" autoClose={2000} />

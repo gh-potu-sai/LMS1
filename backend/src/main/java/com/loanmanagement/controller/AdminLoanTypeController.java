@@ -32,15 +32,15 @@ public class AdminLoanTypeController {
         return ResponseEntity.ok(dto);
     }
 
-    // ✅ Create a new loan type
+    // ✅ Create a new loan type with validation
     @PostMapping
-    public ResponseEntity<LoanTypeDto> create(@RequestBody LoanTypeDto dto) {
+    public ResponseEntity<LoanTypeDto> create(@Valid @RequestBody LoanTypeDto dto) {
         return ResponseEntity.ok(adminLoanTypeService.createLoanType(dto));
     }
 
-    // ✅ Full update of a loan type (all fields)
+    // ✅ Full update of a loan type (with validation)
     @PutMapping("/{id}")
-    public ResponseEntity<LoanTypeDto> update(@PathVariable Long id, @RequestBody LoanTypeDto dto) {
+    public ResponseEntity<LoanTypeDto> update(@PathVariable Long id, @Valid @RequestBody LoanTypeDto dto) {
         return ResponseEntity.ok(adminLoanTypeService.updateLoanType(id, dto));
     }
 
@@ -55,19 +55,17 @@ public class AdminLoanTypeController {
         }
     }
 
-    // ✅ Only update configuration fields (name, maxTenure, maxAmount, maxLoansPerCustomerPerLoanType)
+    // ✅ Update configuration fields with validation
     @PutMapping("/loan-type-config/{id}")
-    public ResponseEntity<LoanTypeDto> updateLoanTypeConfig(@PathVariable Long id, @RequestBody LoanTypeDto dto) {
+    public ResponseEntity<LoanTypeDto> updateLoanTypeConfig(@PathVariable Long id, @Valid @RequestBody LoanTypeDto dto) {
         return ResponseEntity.ok(adminLoanTypeService.updateLoanTypeConfig(id, dto));
     }
 
-    // ✅ Only update financial fields (interest rate and penalty rate)
-
+    // ✅ Update financial fields with validation
     @PutMapping("/interest-rate-config/{id}")
     public ResponseEntity<LoanTypeDto> updateInterestAndPenaltyRates(
         @PathVariable Long id,
         @Valid @RequestBody LoanTypeDto dto) {
-
         return ResponseEntity.ok(adminLoanTypeService.updateInterestAndPenaltyRates(id, dto));
     }
 }

@@ -1,17 +1,16 @@
 // src/routes/AppRoutes.js
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-import Home from '../components/home/Home';
 import Login from '../components/auth/Login';
 import Register from '../components/auth/Register';
+import Home from '../components/home/Home';
 
 import AdminDashboard from '../components/dashboard/AdminDashboard';
+import AdminProfile from '../components/dashboard/AdminProfile';
 import CustomerDashboard from '../components/dashboard/CustomerDashboard';
-import AdminProfile from '../components/dashboard/AdminProfile'; 
 import CustomerProfile from '../components/dashboard/CustomerProfile';
 
+import EmiPaymentsPage from '../components/emi/EmiPaymentsPage'; // ✅ ADD
 import ApplyLoanForm from '../components/loan/customerLoan/ApplyLoanForm';
 
 import ProtectedRoute from './ProtectedRoute';
@@ -25,7 +24,7 @@ function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* 🔐 Admin Dashboard & Profile */}
+        {/* 🔐 Admin */}
         <Route
           path="/admin/dashboard"
           element={
@@ -43,7 +42,7 @@ function AppRoutes() {
           }
         />
 
-        {/* 🔐 Customer Dashboard with nested routes */}
+        {/* 🔐 Customer with nested routes */}
         <Route
           path="/customer/dashboard"
           element={
@@ -54,8 +53,8 @@ function AppRoutes() {
         >
           <Route path="profile" element={<CustomerProfile />} />
           <Route path="apply-loan" element={<ApplyLoanForm />} />
+          <Route path="emi" element={<EmiPaymentsPage />} /> {/* ✅ NEW */}
         </Route>
-
       </Routes>
     </Router>
   );

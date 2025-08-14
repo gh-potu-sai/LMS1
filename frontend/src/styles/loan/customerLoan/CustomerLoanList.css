@@ -305,12 +305,145 @@
   box-sizing: border-box;
 }
 
-.loan-modal-content{
+.loan-modal-content {
   min-width: 50%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* ✅ Soft modal shadow */
+  border-radius: 30px; /* optional - gives rounded corners */
 }
 
 
+/* EMI Schedule button styling */
+.emi-btn {
+  background-color: #023D6B;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 0.9rem;
+}
 
+.emi-btn:hover:not(:disabled) {
+  background-color: #03529c;
+}
+
+.emi-btn:disabled {
+  background-color: #023D6B; /* softer grey for disabled */
+  color: #fffdfd;
+  cursor: not-allowed;
+}
+
+/* Custom Tooltip Wrapper */
+.emi-btn-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip Box */
+.emi-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  width: max-content;
+  max-width: 200px;
+  background-color: #4e606f;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%; /* Above the button */
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Icon Button Style */
+.icon-btn {
+  background-color: #023D6B;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  background-color: #03529c;
+}
+
+/* view details Tooltip Wrapper */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip Text */
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+
+  background-color: #4e606f;
+  color: #fff;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  position: absolute;
+  bottom: 125%; /* Above button */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Tooltip Arrow */
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #023D6B transparent transparent transparent;
+}
+
+/* Show tooltip on hover */
+.tooltip-wrapper:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+/* Arrow for tooltip */
+.emi-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #023D6B transparent transparent transparent;
+}
+
+/* Show tooltip on hover */
+.emi-btn-wrapper:hover .emi-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
 
 .loan-filter-row {
   display: flex;

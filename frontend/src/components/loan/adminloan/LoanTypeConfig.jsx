@@ -10,7 +10,7 @@ function LoanTypeConfig() {
     name: "",
     maxTenureYears: "",
     maxLoanAmount: "",
-    interestRate: "5.5",
+    interestRate: "6.5",
     penaltyRatePercent: "1",
     maxLoansPerCustomerPerLoanType: "3"
   });
@@ -65,9 +65,12 @@ function LoanTypeConfig() {
       toast.error("Please fill in all fields");
       return;
     }
-
+    
     maxLoanAmount = maxLoanAmount.replace(/,/g, "");
-
+    if (Number(maxLoanAmount) < 20000) {
+      toast.error("Minimum loan amount should be ₹20,000");
+      return;
+    }
 
     try {
       const token = localStorage.getItem("token");

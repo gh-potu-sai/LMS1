@@ -21,4 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // ✅ Fetches a user by username (used during login)
     Optional<User> findByUsername(String username);
+    
+    long countByRole(User.Role role);
+
 }

@@ -4,12 +4,11 @@ import com.loanmanagement.config.JwtUtil;
 import com.loanmanagement.dto.AuthResponse;
 import com.loanmanagement.dto.LoginRequest;
 import com.loanmanagement.dto.RegisterRequest;
-
 import com.loanmanagement.dto.UpdatePasswordRequest;
-
 import com.loanmanagement.model.User;
 import com.loanmanagement.service.AuthService;
 
+import jakarta.validation.Valid; // ✅ Required for @Valid
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +37,9 @@ public class AuthController {
         return ResponseEntity.ok(user);
     }
 
-    // POST /api/auth/register
+    // ✅ POST /api/auth/register
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         try {
             authService.register(request);
             return ResponseEntity.ok(Map.of("message", "User registered successfully!"));
@@ -49,9 +48,9 @@ public class AuthController {
         }
     }
 
-    // POST /api/auth/login
+    // ✅ POST /api/auth/login
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         try {
             System.out.println("📲 Login API hit with username: " + request.getUsername());
             AuthResponse response = authService.login(request);
@@ -64,7 +63,7 @@ public class AuthController {
 
     // ✅ POST /api/auth/update-password
     @PostMapping("/update-password")
-    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest request) {
+    public ResponseEntity<?> updatePassword(@Valid @RequestBody UpdatePasswordRequest request) {
         try {
             authService.updatePassword(request.getUsername(), request.getNewPassword(), request.getConfirmPassword());
             return ResponseEntity.ok(Map.of("message", "Password updated successfully!"));

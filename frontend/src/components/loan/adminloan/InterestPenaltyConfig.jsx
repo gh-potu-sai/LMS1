@@ -56,6 +56,12 @@ const InterestPenaltyConfig = () => {
   const handleSave = async () => {
     if (!selectedLoanType) return;
 
+    // Add min interest rate check here
+    if (Number(modalData.interestRate) < 6.5) {
+      toast.error("Interest Rate must be at least 6.5");
+      return;  // Prevent saving
+    }
+
     const updated = {
       ...selectedLoanType,
       interestRate: modalData.interestRate,
@@ -77,6 +83,7 @@ const InterestPenaltyConfig = () => {
       toast.error(`Failed to update "${updated.name}"`, { autoClose: 2000 });
     }
   };
+
 
   return (
     <div className="interest-config-wrapper">

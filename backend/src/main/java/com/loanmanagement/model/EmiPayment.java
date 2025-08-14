@@ -1,41 +1,73 @@
 package com.loanmanagement.model;
 
-// Enables ORM annotations like @Entity, @Id, @ManyToOne, etc.
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-
-// Lombok for generating boilerplate code
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity                               // Marks this class as a JPA entity for DB mapping
-@Table(name = "emi_payment")         // Maps this entity to the "emi_payment" table
-@Data                                // Generates getters, setters, toString, equals, and hashCode
-@NoArgsConstructor                   // Generates a no-argument constructor
-@AllArgsConstructor                  // Generates a constructor with all fields
-@Builder                             // Enables object creation using builder pattern
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Entity
+@Table(name = "emi_payment")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class EmiPayment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne                         // Many EMI payments are linked to one loan
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "loan_id", nullable = false)
+    @JsonIgnore // prevent circular/lazy-serialization issues in responses
     private Loan loan;
 
-    private double amount;             // EMI amount to be paid
-    private LocalDate dueDate;         // Due date for the EMI
+    // money -> BigDecimal with scale(2)
+    @Column(nullable = false, precision = 18, scale = 2)
+    private BigDecimal amount;
 
-    @Enumerated(EnumType.STRING)      // Stores EMI status as string in DB
-    private EmiStatus status;          // Status of the EMI (PENDING, PAID, LATE)
+    @Column(nullable = false)
+    private LocalDate dueDate;
 
-    private LocalDate paymentDate;     // Actual payment date (null if unpaid)
-    private String transactionRef;     // Reference ID for the payment transaction
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EmiStatus status; // PENDING, PAID, LATE
 
-    // Enum for EMI payment status
+    private LocalDate paymentDate;
+
+    @Column(length = 100)
+    private String transactionRef;
+
+    @Column(name = "remaining_balance", nullable = false, precision = 18, scale = 2)
+    private BigDecimal remainingBalance;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDate createdAt;
+
+    @Column(nullable = false)
+    private LocalDate updatedAt;
+
     public enum EmiStatus {
-        PENDING,  // Payment is due
-        PAID,     // Payment is completed
-        LATE      // Payment is overdue
+        PENDING, PAID, LATE
+    }
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDate.now();
+        this.updatedAt = LocalDate.now();
+        // safety: normalize scales
+        if (this.amount != null) this.amount = this.amount.setScale(2);
+        if (this.remainingBalance != null) this.remainingBalance = this.remainingBalance.setScale(2);
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = LocalDate.now();
+        if (this.amount != null) this.amount = this.amount.setScale(2);
+        if (this.remainingBalance != null) this.remainingBalance = this.remainingBalance.setScale(2);
     }
 }
